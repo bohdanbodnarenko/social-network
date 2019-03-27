@@ -1,45 +1,46 @@
-const express = require('express'),
-    app = express(),
-    mongoose = require('mongoose'),
-    bodyParser = require('body-parser'),
-    expressValidator = require('express-validator'),
-    cookieParser = require('cookie-parser'),
-    userRoutes = require('./routes/user');
+const express = require("express"),
+  app = express(),
+  mongoose = require("mongoose"),
+  bodyParser = require("body-parser"),
+  expressValidator = require("express-validator"),
+  cookieParser = require("cookie-parser"),
+  userRoutes = require("./routes/user"),
+  fs = require("fs"),
+  cors = require("cors");
 
 //Config env
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
 app.use(bodyParser.json());
 app.use(expressValidator());
 app.use(cookieParser());
+app.use(cors());
 
-// handle jwt error
-app.use((err, req, res, next) => {
-    console.log(123)
-    console.log(err)
-    if (err.name === 'UnauthorizedError') {
-        res.status(401).json({
-            error: 'Invalid token'
-        });
+app.get("/", (req, res) => {
+  fs.readFile("docs/apiDocs.json", (error, data) => {
+    if (error) {
+      res.status(400).json({ error });
     }
+    const docs = JSON.parse(data);
+    res.json(docs);
+  });
 });
 
 //db
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('DB Connected'));
+mongoose.connect(process.env.MONGO_URI).then(() => console.log("DB Connected"));
 
-mongoose.connection.on('error', err => {
-    console.log(`DB connection error: ${err.message}`)
+mongoose.connection.on("error", err => {
+  console.log(`DB connection error: ${err.message}`);
 });
 
 //routes
-const postRoutes = require('./routes/post');
-const authRoutes = require('./routes/auth');
+const postRoutes = require("./routes/post");
+const authRoutes = require("./routes/auth");
 
-app.use('/', postRoutes);
-app.use('/', authRoutes);
-app.use('/', userRoutes);
+app.use("/", postRoutes);
+app.use("/", authRoutes);
+app.use("/", userRoutes);
 
 const port = process.env.PORT || 8080;
 
