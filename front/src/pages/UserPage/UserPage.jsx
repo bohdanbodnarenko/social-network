@@ -46,7 +46,7 @@ export class UserPage extends Component {
           <Styles.Text>{user.name}</Styles.Text>
           <Styles.Text>{user.email}</Styles.Text>
           <Styles.SmallText>
-            With us from {moment().format("LLL")}
+            With us from {moment(user.created).format("LLL")}
           </Styles.SmallText>
         </Styles.ContentWrapper>
       </Styles.Wrapper>

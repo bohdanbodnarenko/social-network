@@ -1,4 +1,6 @@
-import styled from "styled-components";
+import styled, {
+  keyframes
+} from "styled-components";
 
 export const styles = theme => ({
   root: {
@@ -36,10 +38,12 @@ export const styles = theme => ({
   }
 });
 
+
+
 export const SideMenu = styled.div `
   z-index:200;
   border-radius:50%;
-  box-shadow: ${props => props.open ? "0 0 0 5000px rgba(250, 169, 22,.9)" : ""};
+  box-shadow: ${props => props.open ? "0 0 0 180vh rgba(250, 169, 22,.9)" : ""};
   background-color:${props => props.open ? "rgba(250, 169, 22,.9)" : "#fff"}; 
   border:none;
   outline:none;
@@ -48,10 +52,32 @@ export const SideMenu = styled.div `
 
 export const LinksWrapper = styled.div `
   position:absolute;
-  top:40vh;;
+  top:30vh;
   left:45%;
+  transform:translateX(-45%);
+  min-width:300px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+`
+
+const fadeIn = keyframes `
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+  `
+export const CustomLink = styled.span `
+    font-size:3em;
+    margin: 30px 0;
+    animation: 1s ${fadeIn} ease-out;
+    animation-duration:500ms;
+  `
+export const CloseWrapper = styled.div `
+  position:absolute;
+  right:5px;
+  top:5px;
 `

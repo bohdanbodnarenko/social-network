@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -14,12 +14,18 @@ import MailIcon from "@material-ui/icons/Mail";
 import Exit from "@material-ui/icons/ExitToAppRounded";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { styles, SideMenu, LinksWrapper } from "./styles";
+import {
+  styles,
+  SideMenu,
+  LinksWrapper,
+  CustomLink,
+  CloseWrapper
+} from "./styles";
 import { Button } from "@material-ui/core";
 import Signup from "./Signup";
 import Login from "./Login";
 import { logout } from "../../store/auth/actions";
-import { MenuRounded } from "@material-ui/icons";
+import { MenuRounded, CloseRounded } from "@material-ui/icons";
 
 export class TopBar extends Component {
   state = {
@@ -142,16 +148,23 @@ export class TopBar extends Component {
       { name: "Messages", path: "/messages" }
     ];
     const renderSideMenu = (
-      <SideMenu open={menuOpen}>
+      <SideMenu onClick={this.handleClick("menuOpen")} open={menuOpen}>
         <IconButton onClick={this.handleClick("menuOpen")}>
           <MenuRounded />
         </IconButton>
         {menuOpen && (
           <LinksWrapper>
+            <CloseWrapper>
+              <IconButton>
+                <CloseRounded />
+              </IconButton>
+            </CloseWrapper>
             {links.map(link => (
-              <Link key={link.path} to={link.path}>
-                {link.name}
-              </Link>
+              <CustomLink key={link.path}>
+                <NavLink activeClassName="activeLink" to={link.path}>
+                  {link.name}
+                </NavLink>
+              </CustomLink>
             ))}
           </LinksWrapper>
         )}

@@ -16,7 +16,8 @@ export const TopWrapper = styled.div `
 
 export const ContentWrapper = styled.div `
     position:absolute;
-    left:35%;
+    left:45%;
+    transform:translateX(-45%);
     top:40%;
     display:flex;
     flex-direction:column;
@@ -34,7 +35,7 @@ export const Text = styled.span `
 `
 export const SmallText = styled.span `
     font-weight:bold;
-    font-size:1.3rem;
+    font-size:.9rem;
 `
 
 export const ControllMenu = styled.div `

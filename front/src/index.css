@@ -5,6 +5,7 @@
   font-weight: 450;
   color: #3c4859;
 }
+
 .whiteText {
   color: white;
 }
@@ -12,4 +13,8 @@
 a {
   text-decoration: none;
   outline: none;
+}
+
+.activeLink {
+  color: #03A9F4
 }
