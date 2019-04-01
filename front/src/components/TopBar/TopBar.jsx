@@ -14,18 +14,20 @@ import MailIcon from "@material-ui/icons/Mail";
 import Exit from "@material-ui/icons/ExitToAppRounded";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { styles } from "./styles";
+import { styles, SideMenu, LinksWrapper } from "./styles";
 import { Button } from "@material-ui/core";
 import Signup from "./Signup";
 import Login from "./Login";
 import { logout } from "../../store/auth/actions";
+import { MenuRounded } from "@material-ui/icons";
 
 export class TopBar extends Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     signupOpen: false,
-    loginOpen: false
+    loginOpen: false,
+    menuOpen: false
   };
 
   handleProfileMenuOpen = event => {
@@ -45,13 +47,21 @@ export class TopBar extends Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
-  handleButtonClick = name => () => {
+  handleClick = name => () => {
     this.setState({ [name]: !this.state[name] });
-    this.handleMobileMenuClose();
+    if (this.state.mobileMoreAnchorEl) {
+      this.handleMobileMenuClose();
+    }
   };
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl, signupOpen, loginOpen } = this.state;
+    const {
+      anchorEl,
+      mobileMoreAnchorEl,
+      signupOpen,
+      loginOpen,
+      menuOpen
+    } = this.state;
     const { classes, auth } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -79,10 +89,10 @@ export class TopBar extends Component {
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleButtonClick("signupOpen")}>
+        <MenuItem onClick={this.handleClick("signupOpen")}>
           <Typography color="primary">Sign up</Typography>
         </MenuItem>
-        <MenuItem onClick={this.handleButtonClick("loginOpen")}>
+        <MenuItem onClick={this.handleClick("loginOpen")}>
           <Typography>Login</Typography>
         </MenuItem>
       </Menu>
@@ -126,37 +136,58 @@ export class TopBar extends Component {
         </MenuItem>
       </Menu>
     );
+    const links = [
+      { name: "All users", path: "/users" },
+      { name: "Feed", path: "/feed" },
+      { name: "Messages", path: "/messages" }
+    ];
+    const renderSideMenu = (
+      <SideMenu open={menuOpen}>
+        <IconButton onClick={this.handleClick("menuOpen")}>
+          <MenuRounded />
+        </IconButton>
+        {menuOpen && (
+          <LinksWrapper>
+            {links.map(link => (
+              <Link key={link.path} to={link.path}>
+                {link.name}
+              </Link>
+            ))}
+          </LinksWrapper>
+        )}
+      </SideMenu>
+    );
 
     return (
       <div className={classes.root}>
-        <Signup
-          open={signupOpen}
-          close={this.handleButtonClick("signupOpen")}
-        />
-        <Login open={loginOpen} close={this.handleButtonClick("loginOpen")} />
+        <Signup open={signupOpen} close={this.handleClick("signupOpen")} />
+        <Login open={loginOpen} close={this.handleClick("loginOpen")} />
         <AppBar className={classes.appBar} position="static">
           <Toolbar>
-            <Typography
-              className={classes.title}
-              variant="h5"
-              color="primary"
-              noWrap
-            >
-              Social Network
-            </Typography>
+            {auth.auth && renderSideMenu}
+            <Link to={auth.auth ? "/feed" : "/"}>
+              <Typography
+                className={classes.title}
+                variant="h5"
+                color="primary"
+                noWrap
+              >
+                Social Network
+              </Typography>
+            </Link>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               {!auth.auth ? (
                 <Fragment>
                   <Button
-                    onClick={this.handleButtonClick("loginOpen")}
+                    onClick={this.handleClick("loginOpen")}
                     color="inherit"
                     className={classes.button}
                   >
                     Login
                   </Button>
                   <Button
-                    onClick={this.handleButtonClick("signupOpen")}
+                    onClick={this.handleClick("signupOpen")}
                     variant="contained"
                     color="primary"
                     className={classes.button}
