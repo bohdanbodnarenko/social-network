@@ -2,5 +2,14 @@
   margin: 0;
   padding: 0;
   font-family: "Roboto", sans-serif;
-  border-radius: 10px;
+  font-weight: 450;
+  color: #3c4859;
+}
+.whiteText {
+  color: white;
+}
+
+a {
+  text-decoration: none;
+  outline: none;
 }

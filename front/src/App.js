@@ -1,13 +1,31 @@
-import React, { Component } from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, { Component, Fragment } from "react";
 import MainRouter from "./MainRouter";
+import TopBar from "./components/TopBar/TopBar";
+import lightBlue from "@material-ui/core/colors/lightBlue";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { setupInterceptors } from "./utils/httpService/httpService";
+import { createBrowserHistory } from "history";
+import store from "./store/store";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: lightBlue
+  },
+  typography: {
+    useNextVariants: true
+  }
+});
 
 class App extends Component {
   render() {
+    setupInterceptors(store, createBrowserHistory());
     return (
-      <BrowserRouter>
-        <MainRouter />
-      </BrowserRouter>
+      <Fragment>
+        <MuiThemeProvider theme={theme}>
+          <TopBar />
+          <MainRouter />
+        </MuiThemeProvider>
+      </Fragment>
     );
   }
 }
