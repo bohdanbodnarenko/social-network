@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import * as Styles from "./styles";
+// import * as Styles from "./styles";
 
 export class Messages extends Component {
   render() {
     return (
       <div>
-        <Styles.Shape />
         This is my users
       </div>
     );

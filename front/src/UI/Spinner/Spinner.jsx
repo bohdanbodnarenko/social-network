@@ -2,8 +2,9 @@ import React from "react";
 import "./Spinner.css";
 
 const Spinner = props => {
+  const { small } = props;
   return (
-    <div className="wrapper">
+    <div className={!small ? "wrapper" : ''}>
       <div className="loader">
         <div className="inner one" />
         <div className="inner two" />

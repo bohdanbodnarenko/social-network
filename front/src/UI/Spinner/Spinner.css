@@ -1,6 +1,6 @@
 .loader {
   position: absolute;
-  top: calc(45% - 50px);
+  top: calc(50% - 50px);
   left: calc(50% - 50px);
   width: 100px;
   height: 100px;
@@ -38,11 +38,9 @@
 }
 
 .wrapper {
-  position: fixed;
+  position: absolute;
   width: 100vw;
   height: 100vh;
-  /* background-color: rgba(60, 75, 87,.5); */
-  /* background-image: radial-gradient(circle farthest-corner at center, #3C4B57 0%, #1C262B 100%); */
 }
 
 @keyframes rotate-one {

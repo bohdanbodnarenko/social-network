@@ -23,6 +23,22 @@ exports.userById = (req, res, next, id) => {
 //     }
 // };
 
+exports.confirmPassword = (req, res) => {
+    const {
+        password
+    } = req.body
+    User.findById(req.auth._id).exec((err, user) => {
+        if (err || !user) {
+            return res.status(404).json({
+                data: 'User does not exist!'
+            })
+        }
+        res.json({
+            correct: user.authenticate(password)
+        })
+    })
+}
+
 exports.allUsers = (req, res) => {
     User.find((error, users) => {
         if (error) {
@@ -46,28 +62,33 @@ exports.getUser = (req, res) => {
 };
 
 // TODO fix it
-exports.updateUser = (req, res, next) => {
+exports.updateUser = async (req, res, next) => {
     let user = req.profile;
+    console.log(req.body)
     user = _.extend(user, req.body);
     user.updated = Date.now();
-    user.save(err => {
+    await user.save(err => {
         if (err) {
             return res.status(403).json({
                 error: "You are not authorized to perform this action"
             });
         }
     });
-    user.hashed_password = undefined;
-    user.salt = undefined;
+    //TODO why cant user.hashed_password = undefined
+    newUser = {
+        name: user.name,
+        email: user.email,
+        created: user.created,
+        updated: user.updated,
+    }
     res.json({
-        user
+        newUser
     });
 };
 
 exports.deleteUser = (req, res, next) => {
     let user = req.profile;
-    // const currentUser = jwt.decode(req.cookies.t);
-    if (user._id !== req.auth._id) {
+    if (user._id != req.auth._id) {
         return res.status(403).json({
             error: "You can delete only your own account!"
         });

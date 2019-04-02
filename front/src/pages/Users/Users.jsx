@@ -23,7 +23,6 @@ export class Users extends Component {
     }
     return (
       <div>
-        <Styles.Shape />
         <Styles.UsersWrapper>
           {users.map(user => (
             <SingleUser user={user} key={user._id} />

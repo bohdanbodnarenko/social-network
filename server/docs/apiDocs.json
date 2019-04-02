@@ -5,6 +5,7 @@
   "[GET] /signout": "signout",
   "[GET] /users": "get all users",
   "[GET] /users/:userId": "get user by id",
+  "[POST] /users/confirm": "confirm user password",
   "[PUT] /users/:userId": "update user by id",
   "[DELETE] /users/:userId": "delete user by id",
   "[GET] /posts": "get all posts",

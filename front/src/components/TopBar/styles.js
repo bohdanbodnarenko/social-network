@@ -52,10 +52,10 @@ export const SideMenu = styled.div `
 
 export const LinksWrapper = styled.div `
   position:absolute;
-  top:15vh;
-  left:45%;
+  top: 15vh;
+  left: calc(50% - 20px);
   transform:translateX(-45%);
-  min-width:350px;
+  width:375px;
   display:flex;
   flex-direction:column;
   justify-content:center;

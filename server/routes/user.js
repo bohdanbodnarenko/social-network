@@ -7,15 +7,16 @@ const {
     allUsers,
     getUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    confirmPassword
 } = require('../controllers/user');
 
 const router = express.Router();
 
 router.get('/users', requireSignin, allUsers);
 router.get('/user/:userId', requireSignin, getUser);
+router.post('/user/confirm', requireSignin, confirmPassword);
 
-//TODO add password verification
 router.put('/user/:userId', requireSignin, updateUser);
 router.delete('/user/:userId', requireSignin, deleteUser);
 
