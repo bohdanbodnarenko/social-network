@@ -43,7 +43,7 @@ export const styles = theme => ({
 export const SideMenu = styled.div `
   z-index:200;
   border-radius:50%;
-  box-shadow: ${props => props.open ? "0 0 0 180vh rgba(250, 169, 22,.9)" : ""};
+  box-shadow: ${props => props.open ? "0 0 0 205vh rgba(250, 169, 22,.9)" : ""};
   background-color:${props => props.open ? "rgba(250, 169, 22,.9)" : "#fff"}; 
   border:none;
   outline:none;
@@ -52,10 +52,10 @@ export const SideMenu = styled.div `
 
 export const LinksWrapper = styled.div `
   position:absolute;
-  top:30vh;
+  top:15vh;
   left:45%;
   transform:translateX(-45%);
-  min-width:300px;
+  min-width:350px;
   display:flex;
   flex-direction:column;
   justify-content:center;

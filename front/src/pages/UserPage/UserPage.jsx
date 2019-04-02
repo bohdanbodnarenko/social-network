@@ -10,6 +10,14 @@ export class UserPage extends Component {
   state = {
     user: null
   };
+
+  componentDidUpdate = async (prevProps, prevState) => {
+    if (prevProps.match.params.userId !== this.props.match.params.userId) {
+      const user = await getUserById(this.props.match.params.userId);
+      this.setState({ user });
+    }
+  };
+
   componentDidMount = async () => {
     const user = await getUserById(this.props.match.params.userId);
     this.setState({ user });
@@ -18,9 +26,6 @@ export class UserPage extends Component {
   render() {
     const { user } = this.state;
     const { currentUser } = this.props;
-    if (currentUser && user) {
-      console.log(currentUser._id === user._id);
-    }
     if (!user) {
       return <Spinner />;
     }
@@ -29,7 +34,7 @@ export class UserPage extends Component {
         <IconButton color="secondary">
           <Icons.EditRounded />
         </IconButton>
-        <IconButton color="error">
+        <IconButton color="default">
           <Icons.DeleteRounded />
         </IconButton>
       </Styles.ControllMenu>

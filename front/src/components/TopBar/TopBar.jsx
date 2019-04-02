@@ -145,7 +145,8 @@ export class TopBar extends Component {
     const links = [
       { name: "All users", path: "/users" },
       { name: "Feed", path: "/feed" },
-      { name: "Messages", path: "/messages" }
+      { name: "Messages", path: "/messages" },
+      { name: "Home", path: "/" } 
     ];
     const renderSideMenu = (
       <SideMenu onClick={this.handleClick("menuOpen")} open={menuOpen}>
@@ -161,7 +162,7 @@ export class TopBar extends Component {
             </CloseWrapper>
             {links.map(link => (
               <CustomLink key={link.path}>
-                <NavLink activeClassName="activeLink" to={link.path}>
+                <NavLink exact activeClassName="activeLink" to={link.path}>
                   {link.name}
                 </NavLink>
               </CustomLink>

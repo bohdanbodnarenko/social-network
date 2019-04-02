@@ -6,3 +6,10 @@ export const getUserById = async id => {
     return res.data;
   }
 };
+
+export const getUsers = async id => {
+  const res = await httpService.get(`users`);
+  if (res) {
+    return res.data;
+  }
+};
