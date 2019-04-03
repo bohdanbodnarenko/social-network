@@ -17,9 +17,11 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = (req, res) => {
-  const { email, password } = req.body;
-  User.findOne(
-    {
+  const {
+    email,
+    password
+  } = req.body;
+  User.findOne({
       email
     },
     (err, user) => {
@@ -32,19 +34,21 @@ exports.signin = (req, res) => {
         return res.status(401).json(["Email and password do not match"]);
       }
       // generate token
-      const token = jwt.sign(
-        {
+      const token = jwt.sign({
           _id: user._id
         },
         process.env.JWT_SECRET
       );
-      // User.findById(jwt.decode(token)).then(user=>console.log(user))
 
       res.cookie("t", token, {
         expire: new Date() + 99999
       });
 
-      const { _id, name, email } = user;
+      const {
+        _id,
+        name,
+        email
+      } = user;
 
       return res.json({
         token,

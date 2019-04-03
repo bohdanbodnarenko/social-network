@@ -1,31 +1,21 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import { withRouter } from "react-router-dom";
-const Shape = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #faa916;
-  z-index: -1;
-  transition: 0.8s ease-in-out;
-`;
+import Shape from "./Shape";
 
-class BottomShape extends Component {
-  state = { path: "polygon(0 0, 100% 15%, 0 52%, 0 29%, 0 0)" };
+class TopShape extends Component {
+  state = { path: "polygon(100% 0, 100% 15%, 0 52%, 0 29%, 0 0)" };
   getClipPath = locationPath => {
     switch (locationPath) {
       case "users":
-        return "polygon(37% 30%, 100% 24%, 49% 54%, 14% 73%, 0 0)";
+        return "polygon(66% 93%, 100% 100%, 59% 100%, 0 100%, 55% 77%)";
       case "feed":
-        return "polygon(70% 0, 99% 51%, 53% 34%, 0 56%, 24% 15%)";
+        return "polygon(56% 91%, 66% 100%, 0 100%, 31% 88%, 50% 75%)";
       case "messages":
-        return "polygon(100% 14%, 100% 63%, 75% 34%, 0 31%, 19% 0)";
+        return "polygon(36% 96%, 41% 100%, 0 100%, 0 86%, 38% 79%)";
       case "user":
-        return "polygon(53% 13%, 68% 30%, 100% 59%, 0 21%, 37% 0)";
+        return "polygon(100% 91%, 100% 100%, 27% 100%, 50% 93%, 67% 81%)";
       default:
-        return "polygon(100% 0, 100% 11%, 0 65%, 0 33%, 0 0)";
+        return "polygon(47% 91%, 66% 100%, 0 100%, 0 79%, 14% 87%)";
     }
   };
 
@@ -36,10 +26,20 @@ class BottomShape extends Component {
       });
     }
   }
+  componentDidMount() {
+    this.setState({
+      path: this.getClipPath(this.props.location.pathname.split("/")[1])
+    });
+  }
   render() {
     const { path } = this.state;
-    return <Shape style={{ clipPath: path }} />;
+    return (
+      <div>
+        <Shape bg="#03a9f4" transition="0.75" path={path} />
+        <Shape bg="#faa916" transition="0.8" path={path} />
+      </div>
+    );
   }
 }
 
-export default withRouter(BottomShape);
+export default withRouter(TopShape);

@@ -8,6 +8,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
+import { getLinkToUserAvatar } from "../../utils/requests";
 
 const styles = {
   card: {
@@ -27,7 +28,11 @@ const SingleUser = props => {
         <CardActionArea>
           <CardMedia
             className={classes.media}
-            image={user.photo || "https://www.gravatar.com/avatar?d=mp&s=500"}
+            image={
+              user.photo
+                ? getLinkToUserAvatar(user._id)
+                : "https://www.gravatar.com/avatar?d=mp&s=500"
+            }
             title={user.name}
           />
           <CardContent>

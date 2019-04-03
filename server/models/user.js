@@ -1,6 +1,9 @@
 const mongoose = require('mongoose'),
     uuidv1 = require('uuid/v1'),
-    crypto = require('crypto');
+    crypto = require('crypto'),
+    {
+        ObjectId
+    } = mongoose.Schema
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -26,7 +29,20 @@ const userSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
-    updated: Date
+    about: {
+        type: String,
+        trum: true
+
+    },
+    updated: Date,
+    following: [{
+        type: ObjectId,
+        ref: "User"
+    }],
+    followers: [{
+        type: ObjectId,
+        ref: "User"
+    }]
 });
 
 //virtual field

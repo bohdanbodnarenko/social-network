@@ -1,23 +1,30 @@
 const User = require("../models/user");
 const _ = require("lodash"),
   jwt = require("jsonwebtoken"),
-  { IncomingForm } = require("formidable"),
+  {
+    IncomingForm
+  } = require("formidable"),
   fs = require("fs");
 
 exports.userById = (req, res, next, id) => {
-  User.findById(id).exec((err, user) => {
-    if (err || !user) {
-      return res.status(404).json({
-        error: "User not found"
-      });
-    }
-    req.profile = user;
-    next();
-  });
+  User.findById(id)
+    .populate('following', '_id name')
+    .populate('followers', '_id name')
+    .exec((err, user) => {
+      if (err || !user) {
+        return res.status(404).json({
+          error: "User not found"
+        });
+      }
+      req.profile = user;
+      next();
+    });
 };
 
 exports.confirmPassword = (req, res) => {
-  const { password } = req.body;
+  const {
+    password
+  } = req.body;
   User.findById(req.auth._id).exec((err, user) => {
     if (err || !user) {
       return res.status(404).json({
@@ -44,14 +51,16 @@ exports.allUsers = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  const { profile } = req;
+  const {
+    profile
+  } = req;
   profile.hashed_password = undefined;
   profile.salt = undefined;
   res.json(profile);
 };
 
 exports.userPhoto = (req, res, next) => {
-  if (req.profile.photo.data) {
+  if (req.profile.photo) {
     res.header("Content-Type", req.profile.photo.contentType);
     return res.send(req.profile.photo.data);
   }
@@ -63,7 +72,9 @@ exports.updateUser = (req, res, next) => {
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
     if (err) {
-      return res.statur(400).json({ error: "Photo could not be uploaded" });
+      return res.status(400).json({
+        error: "Photo could not be uploaded"
+      });
     }
     let user = req.profile;
     user = _.extend(user, fields);
@@ -76,7 +87,9 @@ exports.updateUser = (req, res, next) => {
 
     user.save(error => {
       if (err) {
-        return res.status(400).json({ error });
+        return res.status(400).json({
+          error
+        });
       }
       user.hashed_password = undefined;
       user.salt = undefined;
@@ -105,3 +118,90 @@ exports.deleteUser = (req, res, next) => {
     });
   });
 };
+
+//follow 
+exports.addFollowing = (req, res, next) => {
+  User.findByIdAndUpdate({
+    _id: req.body.userId
+  }, {
+    $push: {
+      following: req.body.followId
+    }
+  }, (error, result) => {
+    if (error) {
+      return res.status(400).json({
+        error
+      })
+    }
+    next()
+  })
+}
+
+exports.addFollower = (req, res) => {
+  User.findOneAndUpdate({
+      _id: req.body.followId
+    }, {
+      $push: {
+        followers: req.body.userId
+      }
+    }, (error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error
+        })
+      }
+    })
+    .populate('following', '_id name')
+    .populate('followers', '_id name')
+    .exec((error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error
+        })
+      }
+      result.hashed_password = undefined;
+      result.salt = undefined;
+      return res.json(result)
+    })
+}
+exports.removeFollowing = (req, res, next) => {
+  User.findOneAndUpdate({
+    _id: req.body.userId
+  }, {
+    $pull: {
+      following: req.body.followId
+    }
+  }, (error, result) => {
+    if (error) {
+      return res.status(400).json({
+        error
+      })
+    }
+    next()
+  })
+}
+
+exports.removeFollower = (req, res) => {
+  User.findOneAndUpdate({
+      _id: req.body.followId
+    }, {
+      $pull: {
+        followers: req.body.userId
+      }
+    }, {
+      new: true
+    })
+    .populate('following', '_id name')
+    .populate('followers', '_id name')
+    .exec((error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error
+        })
+      }
+      console.log(result)
+      result.hashed_password = undefined;
+      result.salt = undefined;
+      return res.json(result)
+    })
+}

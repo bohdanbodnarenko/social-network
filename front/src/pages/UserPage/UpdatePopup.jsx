@@ -8,8 +8,7 @@ import {
   Button,
   Input,
   Avatar,
-  FormLabel,
-  FormControl
+  FormLabel
 } from "@material-ui/core";
 import Spinner from "../../UI/Spinner/Spinner";
 
@@ -30,7 +29,7 @@ class UpdatePopup extends Component {
   };
   render() {
     const { name, email, password, photo } = this.state;
-    const { open, error, loading, user } = this.props;
+    const { open, error, loading, user, imageSrc } = this.props;
     return (
       <Dialog onClose={this.props.close} open={open}>
         <DialogTitle>
@@ -39,19 +38,15 @@ class UpdatePopup extends Component {
         <form onSubmit={this.props.submit(password, { name, email, photo })}>
           <DialogContent>
             {loading && <Spinner small />}
-            <Avatar
-              src={user.photo || "https://www.gravatar.com/avatar?d=mp&s=200"}
-            />
+            <Avatar style={{ width: "100px", height: "100px" }} src={imageSrc} />
             <FormLabel htmlFor="photoInput">Change image</FormLabel>
-            <FormControl>
-              <Input
-                onChange={this.handleChange}
-                id="photoInput"
-                name="photo"
-                type="file"
-                fullWidth
-              />
-            </FormControl>
+            <Input
+              onChange={this.handleChange}
+              id="photoInput"
+              name="photo"
+              type="file"
+              fullWidth
+            />
             <TextField
               label="Email"
               value={email}

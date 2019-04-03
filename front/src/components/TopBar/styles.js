@@ -43,7 +43,7 @@ export const styles = theme => ({
 export const SideMenu = styled.div `
   z-index:200;
   border-radius:50%;
-  box-shadow: ${props => props.open ? "0 0 0 205vh rgba(250, 169, 22,.9)" : ""};
+  box-shadow: ${props => props.open ? "0 0 0 225vh rgba(250, 169, 22,.9)" : ""};  
   background-color:${props => props.open ? "rgba(250, 169, 22,.9)" : "#fff"}; 
   border:none;
   outline:none;

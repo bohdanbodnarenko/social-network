@@ -4,14 +4,16 @@ import {
   confirmPassword,
   deleteAccount,
   updateAccount,
-  getLinkToUserAvatar
+  getLinkToUserAvatar,
+  followToUser,
+  unfollowFromUser
 } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
 import * as Styles from "./styles";
 import moment from "moment";
 import { connect } from "react-redux";
 import * as Icons from "@material-ui/icons";
-import { IconButton, Avatar } from "@material-ui/core";
+import { IconButton, Avatar, Button } from "@material-ui/core";
 import DeletePopup from "./DeletePopup";
 import { logout } from "../../store/auth/actions";
 import UpdatePopup from "./UpdatePopup";
@@ -21,7 +23,8 @@ export class UserPage extends Component {
     deletePopup: false,
     updatePopup: false,
     loading: false,
-    passwordError: ""
+    passwordError: "",
+    following: false
   };
 
   handleClick = name => () => {
@@ -57,8 +60,17 @@ export class UserPage extends Component {
     }
   };
 
+  checkIsFollow = user => {
+    console.log(user.followers);
+    if (!user.followers || user.followers.length < 1) {
+      return false;
+    }
+    return user.followers.some(
+      follower => follower._id === this.props.currentUser._id
+    );
+  };
+
   submitUpdate = (password, user) => async event => {
-    //TODO convert to binary and fix fd
     event.preventDefault();
     let fd = new FormData();
     // for (let value of Object.entries(user)) {
@@ -67,8 +79,6 @@ export class UserPage extends Component {
     fd.append("photo", user.photo);
     fd.append("name", user.name);
     fd.append("email", user.email);
-    console.log(typeof user.photo);
-    console.log(fd.photo);
     if (!password) {
       return this.setState({ passwordError: "Field should be filled" });
     }
@@ -98,7 +108,34 @@ export class UserPage extends Component {
   componentDidMount = async () => {
     this.setState({ loading: true });
     const user = await getUserById(this.props.match.params.userId);
-    this.setState({ user, loading: false });
+    console.log(user);
+    this.setState({
+      user,
+      loading: false,
+      following: this.checkIsFollow(user)
+    });
+  };
+
+  handleFollowClick = async () => {
+    if (this.state.following) {
+      this.setState({ loading: true });
+      const res = await unfollowFromUser(
+        this.state.user._id,
+        this.props.currentUser._id
+      );
+      if (res) {
+        this.setState({ loading: false, following: false });
+      }
+    } else {
+      this.setState({ loading: true });
+      const res = await followToUser(
+        this.state.user._id,
+        this.props.currentUser._id
+      );
+      if (res) {
+        this.setState({ loading: false, following: true });
+      }
+    }
   };
 
   render() {
@@ -107,7 +144,8 @@ export class UserPage extends Component {
       deletePopup,
       updatePopup,
       loading,
-      passwordError
+      passwordError,
+      following
     } = this.state;
     const { currentUser } = this.props;
     if (!user) {
@@ -124,7 +162,7 @@ export class UserPage extends Component {
       </Styles.ControllMenu>
     );
     return (
-      <Styles.Wrapper>
+      <div>
         <DeletePopup
           loading={loading}
           error={passwordError}
@@ -134,6 +172,11 @@ export class UserPage extends Component {
           user={user}
         />
         <UpdatePopup
+          imageSrc={
+            user.photo
+              ? getLinkToUserAvatar(user._id)
+              : "https://www.gravatar.com/avatar?d=mp&s=200"
+          }
           loading={loading}
           error={passwordError}
           submit={this.submitUpdate}
@@ -141,7 +184,6 @@ export class UserPage extends Component {
           open={updatePopup}
           user={user}
         />
-        <Styles.Shape2 />
         <Styles.ContentWrapper>
           <Avatar
             style={{ width: "150px", height: "150px" }}
@@ -158,8 +200,27 @@ export class UserPage extends Component {
           <Styles.SmallText>
             With us from {moment(user.created).format("LLL")}
           </Styles.SmallText>
+          {currentUser._id !== user._id && (
+            <Styles.ButtonsWrapper>
+              <Button
+                style={{
+                  backgroundColor: following ? "#C1292E" : "#5FAD56",
+                  border: "none"
+                }}
+                onClick={this.handleFollowClick}
+                variant="outlined"
+              >
+                <span className="whiteText">
+                  {following ? "Unfollow" : "Follow"}
+                </span>
+              </Button>
+              <Button color="secondary" variant="text">
+                Followers
+              </Button>
+            </Styles.ButtonsWrapper>
+          )}
         </Styles.ContentWrapper>
-      </Styles.Wrapper>
+      </div>
     );
   }
 }

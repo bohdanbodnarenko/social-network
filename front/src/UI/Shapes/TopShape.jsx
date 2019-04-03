@@ -1,16 +1,6 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import { withRouter } from "react-router-dom";
-const Shape = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #03a9f4;
-  z-index: -1;
-  transition: 0.8s ease-in-out;
-`;
+import Shape from "./Shape";
 
 class TopShape extends Component {
   state = { path: "polygon(100% 0, 100% 15%, 0 52%, 0 29%, 0 0)" };
@@ -36,9 +26,19 @@ class TopShape extends Component {
       });
     }
   }
+  componentDidMount() {
+    this.setState({
+      path: this.getClipPath(this.props.location.pathname.split("/")[1])
+    });
+  }
   render() {
     const { path } = this.state;
-    return <Shape style={{ clipPath: path }} />;
+    return (
+      <div>
+        <Shape bg="#faa916" transition="0.75" path={path} />
+        <Shape bg="#03a9f4" transition="0.8" path={path} />
+      </div>
+    );
   }
 }
 

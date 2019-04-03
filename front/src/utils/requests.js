@@ -40,3 +40,19 @@ export const updateAccount = async (id, user) => {
 export const getLinkToUserAvatar = id => {
   return `http://localhost:8080/user/photo/${id}`;
 };
+
+export const followToUser = async (followId, userId) => {
+  const res = await httpService.put('user/follow', {
+    userId,
+    followId
+  })
+  return res;
+}
+
+export const unfollowFromUser = async (followId, userId) => {
+  const res = await httpService.put('user/unfollow', {
+    userId,
+    followId
+  })
+  return res;
+}

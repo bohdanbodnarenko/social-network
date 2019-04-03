@@ -32,8 +32,8 @@ class App extends Component {
       <Fragment>
         <MuiThemeProvider theme={theme}>
           <TopBar />
-          <BottomShape />
           <TopShape />
+          <BottomShape />
           <MainRouter />
         </MuiThemeProvider>{" "}
       </Fragment>
