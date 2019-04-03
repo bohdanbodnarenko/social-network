@@ -3,14 +3,15 @@ import {
   getUserById,
   confirmPassword,
   deleteAccount,
-  updateAccount
+  updateAccount,
+  getLinkToUserAvatar
 } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
 import * as Styles from "./styles";
 import moment from "moment";
 import { connect } from "react-redux";
 import * as Icons from "@material-ui/icons";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Avatar } from "@material-ui/core";
 import DeletePopup from "./DeletePopup";
 import { logout } from "../../store/auth/actions";
 import UpdatePopup from "./UpdatePopup";
@@ -59,7 +60,7 @@ export class UserPage extends Component {
   submitUpdate = (password, user) => async event => {
     //TODO convert to binary and fix fd
     event.preventDefault();
-    let fd = new FormData(event.target);
+    let fd = new FormData();
     // for (let value of Object.entries(user)) {
     //   fd.append(value[0], value[1]);
     // }
@@ -77,7 +78,7 @@ export class UserPage extends Component {
     this.setState({ loading: true });
     const { correct } = await confirmPassword(password);
     if (correct) {
-      const res = await updateAccount(this.state.user._id, user);
+      const res = await updateAccount(this.state.user._id, fd);
       if (res) {
         this.setState({
           updatePopup: false,
@@ -142,8 +143,13 @@ export class UserPage extends Component {
         />
         <Styles.Shape2 />
         <Styles.ContentWrapper>
-          <Styles.Image
-            src={user.photo || "https://www.gravatar.com/avatar?d=mp&s=200"}
+          <Avatar
+            style={{ width: "150px", height: "150px" }}
+            src={
+              user.photo
+                ? getLinkToUserAvatar(user._id)
+                : "https://www.gravatar.com/avatar?d=mp&s=200"
+            }
             alt={user.name}
           />
           {currentUser._id === user._id && renderControllMenu}

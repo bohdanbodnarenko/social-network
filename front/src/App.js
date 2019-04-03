@@ -8,6 +8,7 @@ import { setupInterceptors } from "./utils/httpService/httpService";
 import { createBrowserHistory } from "history";
 import store from "./store/store";
 import TopShape from "./UI/Shapes/TopShape";
+import BottomShape from "./UI/Shapes/BottomShape";
 
 const theme = createMuiTheme({
   palette: {
@@ -22,17 +23,17 @@ const theme = createMuiTheme({
 export const history = createBrowserHistory();
 class App extends Component {
   componentDidUpdate(prevProps, prevState) {
-    console.log(history)
+    console.log(history);
   }
-  
+
   render() {
-    
     setupInterceptors(store, history);
     return (
       <Fragment>
         <MuiThemeProvider theme={theme}>
           <TopBar />
-          <TopShape/>
+          <BottomShape />
+          <TopShape />
           <MainRouter />
         </MuiThemeProvider>{" "}
       </Fragment>

@@ -16,24 +16,25 @@ exports.getPosts = (req, res) => {
     .catch(error => console.error(error));
 };
 
-exports.createPost = async (req, res, next) => {
-  // let form = new IncomingForm();
-  // form.keepExtensions = true;
-  // form.parse(req, (error, fields, files) => {
-  //     if (error) {
-  //         return res.status(400).json({
-  //             error: "Image could not be uploaded"
-  //         });
-  //     }
-  let post = new Post(req.body);
-  const user = await User.findById(jwt.decode(req.cookies.t));
-  user.salt = undefined;
-  user.hashed_password = undefined;
-  post.postedBy = user;
-  // if (files.photo) {
-  //     post.photo.data = fs.readFileSync(files.photo.path);
-  //     post.photo.contentType = files.photo.type;
-  // }
+exports.createPost = (req, res, next) => {
+  let form = new IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Image could not be uploaded"
+      });
+    }
+    let post = new Post(fields);
+    const user = await User.findById(req.auth._id);
+    user.salt = undefined;
+    user.hashed_password = undefined;
+    post.postedBy = user;
+    if (files.photo) {
+      post.photo.data = fs.readFileSync(files.photo.path);
+      post.photo.contentType = files.photo.type;
+    }
+  });
   post.save((error, result) => {
     if (error) {
       return res.status(400).json({
@@ -42,7 +43,6 @@ exports.createPost = async (req, res, next) => {
     }
     res.json(result);
   });
-  // });
 };
 
 exports.postsByUser = (req, res) => {

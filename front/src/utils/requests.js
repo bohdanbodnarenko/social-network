@@ -15,24 +15,28 @@ export const getUsers = async id => {
 };
 
 export const confirmPassword = async password => {
-  const res = await httpService.post('user/confirm', {
+  const res = await httpService.post("user/confirm", {
     password
   });
   if (res) {
-    return res.data
+    return res.data;
   }
-}
+};
 
 export const deleteAccount = async id => {
-  const res = await httpService.delete(`user/${id}`)
+  const res = await httpService.delete(`user/${id}`);
   if (res) {
-    return res.data
+    return res.data;
   }
-}
+};
 
 export const updateAccount = async (id, user) => {
-  const res = await httpService.put(`user/${id}`, user)
+  const res = await httpService.put(`user/${id}`, user);
   if (res) {
-    return res.data
+    return res.data;
   }
-}
+};
+
+export const getLinkToUserAvatar = id => {
+  return `http://localhost:8080/user/photo/${id}`;
+};
