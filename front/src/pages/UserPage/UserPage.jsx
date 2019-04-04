@@ -6,7 +6,8 @@ import {
   updateAccount,
   getLinkToUserAvatar,
   followToUser,
-  unfollowFromUser
+  unfollowFromUser,
+  getPostsByUser
 } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
 import * as Styles from "./styles";
@@ -25,6 +26,7 @@ export class UserPage extends Component {
     updatePopup: false,
     loading: false,
     passwordError: "",
+    posts: [],
     following: false
   };
 
@@ -108,31 +110,42 @@ export class UserPage extends Component {
   componentDidMount = async () => {
     this.setState({ loading: true });
     const user = await getUserById(this.props.match.params.userId);
+    const posts = await getPostsByUser(this.props.match.params.userId);
+    console.log(posts);
     this.setState({
       user,
       loading: false,
-      following: this.checkIsFollow(user)
+      following: this.checkIsFollow(user),
+      posts
     });
   };
 
   handleFollowClick = async () => {
     if (this.state.following) {
       this.setState({ loading: true });
-      const res = await unfollowFromUser(
+      const { data } = await unfollowFromUser(
         this.state.user._id,
         this.props.currentUser._id
       );
-      if (res) {
-        this.setState({ loading: false, following: false });
+      if (data) {
+        this.setState({
+          loading: false,
+          following: false,
+          user: { ...this.state.user, followers: data.followers }
+        });
       }
     } else {
       this.setState({ loading: true });
-      const res = await followToUser(
+      const { data } = await followToUser(
         this.state.user._id,
         this.props.currentUser._id
       );
-      if (res) {
-        this.setState({ loading: false, following: true });
+      if (data) {
+        this.setState({
+          loading: false,
+          following: true,
+          user: { ...this.state.user, followers: data.followers }
+        });
       }
     }
   };
@@ -144,7 +157,8 @@ export class UserPage extends Component {
       updatePopup,
       loading,
       passwordError,
-      following
+      following,
+      posts
     } = this.state;
     const { currentUser } = this.props;
     if (!user) {
@@ -222,7 +236,11 @@ export class UserPage extends Component {
               <Spinner small />
             </div>
           )}
-          <UserDataTabs user={user} />
+          <UserDataTabs
+            posts={posts}
+            isCurrent={currentUser._id === user._id}
+            user={user}
+          />
         </Styles.ContentWrapper>
       </div>
     );

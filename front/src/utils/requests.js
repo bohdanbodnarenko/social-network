@@ -7,6 +7,13 @@ export const getUserById = async id => {
   }
 };
 
+export const getPostsByUser = async id => {
+  const res = await httpService.get(`posts/${id}`);
+  if (res) {
+    return res.data;
+  }
+};
+
 export const getUsers = async id => {
   const res = await httpService.get(`users`);
   if (res) {

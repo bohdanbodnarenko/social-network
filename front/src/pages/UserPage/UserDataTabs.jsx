@@ -5,7 +5,7 @@ import SwipeableViews from "react-swipeable-views";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import { Paper } from "@material-ui/core";
+import { Paper, Button } from "@material-ui/core";
 import UsersList from "../../UI/UsersList/UsersList";
 
 function TabContainer({ children, dir }) {
@@ -47,7 +47,7 @@ class UserDataTabs extends React.Component {
   };
 
   render() {
-    const { classes, theme, user } = this.props;
+    const { classes, theme, user, posts, isCurrent } = this.props;
     return (
       <Paper className={classes.root}>
         <Tabs
@@ -57,7 +57,7 @@ class UserDataTabs extends React.Component {
           textColor="primary"
           variant="fullWidth"
         >
-          <Tab label={`${18} Posts`} />
+          <Tab label={`${posts.length} Posts`} />
           <Tab label={`${user.followers.length} Followers`} />
           <Tab label={`${user.following.length} Following`} />
         </Tabs>
@@ -66,7 +66,10 @@ class UserDataTabs extends React.Component {
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}>Posts will be here</TabContainer>
+          <TabContainer dir={theme.direction}>
+            {isCurrent && <Button>Create Post</Button>}
+            <div>Posts will be here</div>
+          </TabContainer>
           <TabContainer dir={theme.direction}>
             <UsersList users={user.followers} />
           </TabContainer>
