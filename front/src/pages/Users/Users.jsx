@@ -9,17 +9,18 @@ export class Users extends Component {
     users: null,
     loading: true
   };
-  componentDidMount = async () => {
-    const { users } = await getUsers();
-    if (users) {
-      this.setState({ users, loading: false });
-    }
+  componentDidMount = () => {
+    getUsers().then(({ users }) => {
+      if (users) {
+        this.setState({ users, loading: false });
+      }
+    });
   };
 
   render() {
     const { users, loading } = this.state;
     if (!users || loading) {
-      return <Spinner />;
+      return <Spinner size={100}/>;
     }
     return (
       <div>

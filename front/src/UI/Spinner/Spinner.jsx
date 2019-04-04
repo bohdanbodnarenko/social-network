@@ -4,7 +4,7 @@ import "./Spinner.css";
 const Spinner = props => {
   const { small } = props;
   return (
-    <div className={!small ? "wrapper" : ''}>
+    <div className={!small ? "wrapper" : 'small'}>
       <div className="loader">
         <div className="inner one" />
         <div className="inner two" />

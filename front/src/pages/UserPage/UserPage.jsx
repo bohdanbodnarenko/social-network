@@ -203,22 +203,27 @@ export class UserPage extends Component {
           {currentUser._id !== user._id && (
             <Styles.ButtonsWrapper>
               <Button
-                style={{
-                  backgroundColor: following ? "#C1292E" : "#5FAD56",
-                  border: "none"
-                }}
+                disabled={loading}
+                color='inherit'
                 onClick={this.handleFollowClick}
                 variant="outlined"
               >
-                <span className="whiteText">
+                <span
+                  style={{
+                    color: following ? "#C1292E" : "#5FAD56"
+                  }}
+                >
                   {following ? "Unfollow" : "Follow"}
                 </span>
               </Button>
-              <Button color="secondary" variant="text">
+              <Button disabled={loading} color="secondary" variant="text">
                 Followers
               </Button>
             </Styles.ButtonsWrapper>
           )}
+          <div style={{ marginTop: "70px" }}>
+            {loading && <Spinner small />}
+          </div>
         </Styles.ContentWrapper>
       </div>
     );

@@ -20,7 +20,7 @@
   left: 0%;
   top: 0%;
   animation: rotate-one 1s linear infinite;
-  border-bottom: 3px solid #03A9F4;
+  border-bottom: 3px solid #03a9f4;
 }
 
 .inner.two {
@@ -41,6 +41,10 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
+}
+
+.small {
+  position: relative;
 }
 
 @keyframes rotate-one {
