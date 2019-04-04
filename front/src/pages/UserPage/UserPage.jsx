@@ -17,6 +17,7 @@ import { IconButton, Avatar, Button } from "@material-ui/core";
 import DeletePopup from "./DeletePopup";
 import { logout } from "../../store/auth/actions";
 import UpdatePopup from "./UpdatePopup";
+import UserDataTabs from "./UserDataTabs";
 export class UserPage extends Component {
   state = {
     user: null,
@@ -33,8 +34,9 @@ export class UserPage extends Component {
 
   componentDidUpdate = async (prevProps, prevState) => {
     if (prevProps.match.params.userId !== this.props.match.params.userId) {
+      this.setState({ loading: true });
       const user = await getUserById(this.props.match.params.userId);
-      this.setState({ user });
+      this.setState({ user, loading: false });
     }
   };
 
@@ -48,7 +50,6 @@ export class UserPage extends Component {
     if (correct) {
       const res = await deleteAccount(this.state.user._id);
       if (res) {
-        console.log(res);
         this.setState({ deletePopup: false, loading: false });
       }
       this.setState({ loading: false });
@@ -61,7 +62,6 @@ export class UserPage extends Component {
   };
 
   checkIsFollow = user => {
-    console.log(user.followers);
     if (!user.followers || user.followers.length < 1) {
       return false;
     }
@@ -108,7 +108,6 @@ export class UserPage extends Component {
   componentDidMount = async () => {
     this.setState({ loading: true });
     const user = await getUserById(this.props.match.params.userId);
-    console.log(user);
     this.setState({
       user,
       loading: false,
@@ -204,7 +203,7 @@ export class UserPage extends Component {
             <Styles.ButtonsWrapper>
               <Button
                 disabled={loading}
-                color='inherit'
+                color="inherit"
                 onClick={this.handleFollowClick}
                 variant="outlined"
               >
@@ -216,14 +215,14 @@ export class UserPage extends Component {
                   {following ? "Unfollow" : "Follow"}
                 </span>
               </Button>
-              <Button disabled={loading} color="secondary" variant="text">
-                Followers
-              </Button>
             </Styles.ButtonsWrapper>
           )}
-          <div style={{ marginTop: "70px" }}>
-            {loading && <Spinner small />}
-          </div>
+          {loading && (
+            <div style={{ margin: "60px 0" }}>
+              <Spinner small />
+            </div>
+          )}
+          <UserDataTabs user={user} />
         </Styles.ContentWrapper>
       </div>
     );

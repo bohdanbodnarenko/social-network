@@ -34,7 +34,7 @@ export const ControllMenu = styled.div `
 
 export const ButtonsWrapper = styled.div `
 margin-top:.6em;
-width:275px;
+height:10vh;
 display:flex;
-justify-content:space-evenly;
+flex-direction:column;
 `

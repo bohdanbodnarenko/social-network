@@ -121,7 +121,7 @@ exports.deleteUser = (req, res, next) => {
 
 //follow 
 exports.addFollowing = (req, res, next) => {
-  User.findByIdAndUpdate({
+  User.findOneAndUpdate({
     _id: req.body.userId
   }, {
     $push: {
@@ -138,31 +138,39 @@ exports.addFollowing = (req, res, next) => {
 }
 
 exports.addFollower = (req, res) => {
-  User.findOneAndUpdate({
-      _id: req.body.followId
-    }, {
-      $push: {
-        followers: req.body.userId
-      }
-    }, (error, result) => {
-      if (error) {
-        return res.status(400).json({
-          error
+  User.find({
+    followers: req.body.userId,
+    _id: req.body.followId
+  }).exec((err, followersArr) => {
+    if (followersArr.length === 0) {
+      User.findOneAndUpdate({
+          _id: req.body.followId
+        }, {
+          $addToSet: {
+            followers: req.body.userId
+          }
+        }, (error, result) => {
+          console.log(result)
+          if (error) {
+            return res.status(400).json({
+              error
+            })
+          }
         })
-      }
-    })
-    .populate('following', '_id name')
-    .populate('followers', '_id name')
-    .exec((error, result) => {
-      if (error) {
-        return res.status(400).json({
-          error
+        .populate('following', '_id name')
+        .populate('followers', '_id name')
+        .exec((error, result) => {
+          if (error) {
+            return res.status(400).json({
+              error
+            })
+          }
+          result.hashed_password = undefined;
+          result.salt = undefined;
+          return res.json(result)
         })
-      }
-      result.hashed_password = undefined;
-      result.salt = undefined;
-      return res.json(result)
-    })
+    }
+  })
 }
 exports.removeFollowing = (req, res, next) => {
   User.findOneAndUpdate({
@@ -199,7 +207,6 @@ exports.removeFollower = (req, res) => {
           error
         })
       }
-      console.log(result)
       result.hashed_password = undefined;
       result.salt = undefined;
       return res.json(result)
