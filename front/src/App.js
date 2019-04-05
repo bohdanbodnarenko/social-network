@@ -9,16 +9,7 @@ import { createBrowserHistory } from "history";
 import store from "./store/store";
 import TopShape from "./UI/Shapes/TopShape";
 import BottomShape from "./UI/Shapes/BottomShape";
-
-const theme = createMuiTheme({
-  palette: {
-    primary: lightBlue,
-    secondary: amber
-  },
-  typography: {
-    useNextVariants: true
-  }
-});
+import { theme } from "./theme";
 
 export const history = createBrowserHistory();
 class App extends Component {

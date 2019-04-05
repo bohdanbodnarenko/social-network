@@ -111,7 +111,7 @@ export class TopBar extends Component {
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
+          <IconButton>
             <Badge badgeContent={4} color="secondary">
               <MailIcon />
             </Badge>
@@ -119,7 +119,7 @@ export class TopBar extends Component {
           <p>Messages</p>
         </MenuItem>
         <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
+          <IconButton>
             <Badge badgeContent={11} color="secondary">
               <NotificationsIcon />
             </Badge>
@@ -128,14 +128,14 @@ export class TopBar extends Component {
         </MenuItem>
         <Link to={`/user/${auth.currentUser._id}`}>
           <MenuItem>
-            <IconButton color="inherit">
+            <IconButton>
               <AccountCircle />
             </IconButton>
             <p>Profile</p>
           </MenuItem>
         </Link>
         <MenuItem onClick={this.props.logout}>
-          <IconButton color="inherit">
+          <IconButton>
             <Exit />
           </IconButton>
           <p>Logout</p>
@@ -146,7 +146,7 @@ export class TopBar extends Component {
       { name: "All users", path: "/users" },
       { name: "Feed", path: "/feed" },
       { name: "Messages", path: "/messages" },
-      { name: "Home", path: "/" } 
+      { name: "Home", path: "/" }
     ];
     const renderSideMenu = (
       <SideMenu onClick={this.handleClick("menuOpen")} open={menuOpen}>
@@ -195,7 +195,6 @@ export class TopBar extends Component {
                 <Fragment>
                   <Button
                     onClick={this.handleClick("loginOpen")}
-                    color="inherit"
                     className={classes.button}
                   >
                     Login
@@ -211,12 +210,12 @@ export class TopBar extends Component {
                 </Fragment>
               ) : (
                 <Fragment>
-                  <IconButton color="inherit">
+                  <IconButton>
                     <Badge badgeContent={4} color="secondary">
                       <MailIcon />
                     </Badge>
                   </IconButton>
-                  <IconButton color="inherit">
+                  <IconButton>
                     <Badge badgeContent={17} color="secondary">
                       <NotificationsIcon />
                     </Badge>
@@ -224,7 +223,6 @@ export class TopBar extends Component {
                   <IconButton
                     aria-haspopup="true"
                     onClick={this.handleProfileMenuOpen}
-                    color="inherit"
                   >
                     <AccountCircle />
                   </IconButton>
@@ -235,7 +233,6 @@ export class TopBar extends Component {
               <IconButton
                 aria-haspopup="true"
                 onClick={this.handleMobileMenuOpen}
-                color="inherit"
               >
                 <MoreIcon />
               </IconButton>

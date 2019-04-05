@@ -217,7 +217,6 @@ export class UserPage extends Component {
             <Styles.ButtonsWrapper>
               <Button
                 disabled={loading}
-                color="inherit"
                 onClick={this.handleFollowClick}
                 variant="outlined"
               >
