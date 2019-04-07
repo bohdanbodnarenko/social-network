@@ -48,18 +48,33 @@ export const getLinkToUserAvatar = id => {
   return `http://localhost:8080/user/photo/${id}`;
 };
 
+export const getLinkToPostImage = id => {
+  return `http://localhost:8080/post/photo/${id}`;
+};
+
+export const deletePost = async id => httpService.delete(`/posts/${id}`);
+
 export const followToUser = async (followId, userId) => {
-  const res = await httpService.put('user/follow', {
+  const res = await httpService.put("user/follow", {
     userId,
     followId
-  })
+  });
   return res;
-}
+};
 
 export const unfollowFromUser = async (followId, userId) => {
-  const res = await httpService.put('user/unfollow', {
+  const res = await httpService.put("user/unfollow", {
     userId,
     followId
-  })
+  });
   return res;
-}
+};
+
+export const createPost = async userdata => httpService.post("/post", userdata);
+export const getPost = async id => httpService.get(`/post/${id}`);
+export const likePost = async (postId, userId) =>
+  httpService.put("/post/like", { postId, userId });
+export const unlikePost = async (postId, userId) =>
+  httpService.put("/post/unlike", { postId, userId });
+export const addComment = async (text, postId, userId) =>
+  httpService.put("/post/comment", { comment: { text }, postId, userId });

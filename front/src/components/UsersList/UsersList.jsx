@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import * as Router from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -8,6 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { getLinkToUserAvatar } from "../../utils/requests";
+import * as Router from "react-router-dom";
 import { Link } from "@material-ui/core";
 
 const styles = theme => ({

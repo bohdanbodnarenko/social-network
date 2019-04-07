@@ -8,6 +8,7 @@ const Post = require("../models/post"),
 exports.getPosts = (req, res) => {
   const posts = Post.find()
     .populate("postedBy", "_id name ")
+    .populate("comments", "text created")
     .then(posts => {
       res.json({
         posts
@@ -16,7 +17,7 @@ exports.getPosts = (req, res) => {
     .catch(error => console.error(error));
 };
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
   let form = new IncomingForm();
   form.keepExtensions = true;
   form.parse(req, async (err, fields, files) => {
@@ -34,14 +35,14 @@ exports.createPost = (req, res, next) => {
       post.photo.data = fs.readFileSync(files.photo.path);
       post.photo.contentType = files.photo.type;
     }
-  });
-  post.save((error, result) => {
-    if (error) {
-      return res.status(400).json({
-        error
-      });
-    }
-    res.json(result);
+    post.save((error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error
+        });
+      }
+      res.json(result);
+    });
   });
 };
 
@@ -49,8 +50,9 @@ exports.postsByUser = (req, res) => {
   Post.find({
     postedBy: req.profile._id
   })
-    .populate("postedBy", "_id name")
-    .sort("created")
+    .populate("postedBy", "_id name photo")
+    .populate("comments", "text created")
+    .sort({ created: -1 })
     .exec((error, posts) => {
       if (error) {
         return res.status(400).json({
@@ -64,6 +66,8 @@ exports.postsByUser = (req, res) => {
 exports.postById = (req, res, next, id) => {
   Post.findById(id)
     .populate("postedBy", "id name")
+    // .populate("comments", "_id text created")
+    .populate("comments.postedBy", "_id name photo")
     .exec((error, post) => {
       if (error || !post) {
         return res.status(400).json({
@@ -73,6 +77,11 @@ exports.postById = (req, res, next, id) => {
       req.post = post;
       next();
     });
+};
+
+exports.postPhoto = (req, res, next) => {
+  res.header("Content-Type", req.post.photo.contentType);
+  return res.send(req.post.photo.data);
 };
 
 exports.updatePost = (req, res, next) => {
@@ -98,6 +107,14 @@ exports.isPoster = (req, res, next) => {
   next();
 };
 
+exports.getPostById = (req, res) => {
+  const { post } = req;
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+  res.json({ post });
+};
+
 exports.deletePost = (req, res, next) => {
   let post = req.post;
   post.remove((error, post) => {
@@ -106,4 +123,73 @@ exports.deletePost = (req, res, next) => {
     }
     res.json({ message: "Post deleted successfully" });
   });
+};
+
+exports.like = (req, res) => {
+  Post.findOneAndUpdate(
+    { _id: req.body.postId },
+    {
+      $addToSet: { likes: req.body.userId }
+    },
+    { new: true }
+  ).exec((error, result) => {
+    if (error) {
+      return res.status(400).json({ error });
+    }
+    res.json({ result });
+  });
+};
+
+exports.unlike = (req, res) => {
+  Post.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $pull: { likes: req.body.userId }
+    },
+    { new: true }
+  ).exec((error, result) => {
+    if (error) {
+      return res.status(400).json({ error });
+    }
+    res.json({ result });
+  });
+};
+
+exports.comment = (req, res) => {
+  let comment = req.body.comment;
+  comment.postedBy = req.body.userId;
+  Post.findOneAndUpdate(
+    { _id: req.body.postId },
+    {
+      $push: { comments: comment }
+    },
+    { new: true }
+  )
+    .populate("comments.postedBy", "_id name photo")
+    .populate("postedBy", "_id name photo")
+    .exec((error, result) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      res.json({ result });
+    });
+};
+
+exports.uncomment = (req, res) => {
+  let comment = req.body.comment;
+  Post.findOneAndUpdate(
+    { _id: req.body.postId },
+    {
+      $pull: { comments: { _id: comment._id } }
+    },
+    { new: true }
+  )
+    .populate("comments.postedBy", "_id name photo")
+    .populate("postedBy", "_id name photo")
+    .exec((error, result) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      res.json({ result });
+    });
 };

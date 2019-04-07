@@ -7,10 +7,16 @@
   "[GET] /users/:userId": "get user by id",
   "[POST] /users/confirm": "confirm user password",
   "[PUT] /users/:userId": "update user by id",
+  "[GET] /user/photo/:userId": "get user photo",
+  "[POST] /user/confirm": "confirm user password",
   "[DELETE] /users/:userId": "delete user by id",
   "[GET] /posts": "get all posts",
+  "[GET] /post/:postId": "get post by id",
   "[GET] /posts/:usedId": "all user's posts",
   "[POST] /posts": "create a new post",
   "[PUT] /posts/:postId": "update post",
-  "[DELETE] /posts/:postId": "delete post"
+  "[PUT] /post/like": "like post",
+  "[PUT] /post/unlike": "inlike post",
+  "[DELETE] /posts/:postId": "delete post",
+  "[GET] /post/photo/:userId": "get post photo"
 }

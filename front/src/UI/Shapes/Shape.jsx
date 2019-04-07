@@ -8,6 +8,7 @@ const ShapeWrapper = styled.div`
   height: 100vh;
   background: ${props => props.bg};
   z-index: -1;
+  opacity: 0.35;
   transition: ${props => props.transition}s ease-in-out;
   clip-path: ${props => props.path};
   border: none;

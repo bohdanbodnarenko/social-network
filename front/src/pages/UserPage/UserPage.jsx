@@ -14,11 +14,12 @@ import * as Styles from "./styles";
 import moment from "moment";
 import { connect } from "react-redux";
 import * as Icons from "@material-ui/icons";
-import { IconButton, Avatar, Button } from "@material-ui/core";
+import { IconButton, Avatar, Fab } from "@material-ui/core";
 import DeletePopup from "./DeletePopup";
 import { logout } from "../../store/auth/actions";
 import UpdatePopup from "./UpdatePopup";
 import UserDataTabs from "./UserDataTabs";
+import NewPostModal from "../../components/NewPostModal/NewPostModal";
 export class UserPage extends Component {
   state = {
     user: null,
@@ -27,6 +28,7 @@ export class UserPage extends Component {
     loading: false,
     passwordError: "",
     posts: [],
+    newPostModal: false,
     following: false
   };
 
@@ -38,7 +40,8 @@ export class UserPage extends Component {
     if (prevProps.match.params.userId !== this.props.match.params.userId) {
       this.setState({ loading: true });
       const user = await getUserById(this.props.match.params.userId);
-      this.setState({ user, loading: false });
+      const posts = await getPostsByUser(this.props.match.params.userId);
+      this.setState({ user, posts, loading: false });
     }
   };
 
@@ -75,9 +78,6 @@ export class UserPage extends Component {
   submitUpdate = (password, user) => async event => {
     event.preventDefault();
     let fd = new FormData();
-    // for (let value of Object.entries(user)) {
-    //   fd.append(value[0], value[1]);
-    // }
     fd.append("photo", user.photo);
     fd.append("name", user.name);
     fd.append("email", user.email);
@@ -90,12 +90,12 @@ export class UserPage extends Component {
     this.setState({ loading: true });
     const { correct } = await confirmPassword(password);
     if (correct) {
-      const res = await updateAccount(this.state.user._id, fd);
-      if (res) {
+      const userRes = await updateAccount(this.state.user._id, fd);
+      if (userRes) {
         this.setState({
           updatePopup: false,
           loading: false,
-          user: { name: user.name, email: user.email }
+          user: { ...this.state.user, name: user.name, email: user.email }
         });
       }
       this.setState({ loading: false });
@@ -111,7 +111,6 @@ export class UserPage extends Component {
     this.setState({ loading: true });
     const user = await getUserById(this.props.match.params.userId);
     const posts = await getPostsByUser(this.props.match.params.userId);
-    console.log(posts);
     this.setState({
       user,
       loading: false,
@@ -158,7 +157,8 @@ export class UserPage extends Component {
       loading,
       passwordError,
       following,
-      posts
+      posts,
+      newPostModal
     } = this.state;
     const { currentUser } = this.props;
     if (!user) {
@@ -176,6 +176,11 @@ export class UserPage extends Component {
     );
     return (
       <div>
+        {loading && <Spinner />}
+        <NewPostModal
+          close={this.handleClick("newPostModal")}
+          open={newPostModal}
+        />
         <DeletePopup
           loading={loading}
           error={passwordError}
@@ -215,27 +220,19 @@ export class UserPage extends Component {
           </Styles.SmallText>
           {currentUser._id !== user._id && (
             <Styles.ButtonsWrapper>
-              <Button
+              <Fab
                 disabled={loading}
                 onClick={this.handleFollowClick}
-                variant="outlined"
+                variant="extended"
+                color={following ? "secondary" : "primary"}
               >
-                <span
-                  style={{
-                    color: following ? "#C1292E" : "#5FAD56"
-                  }}
-                >
-                  {following ? "Unfollow" : "Follow"}
-                </span>
-              </Button>
+                {following ? "Unfollow" : "Follow"}
+              </Fab>
             </Styles.ButtonsWrapper>
           )}
-          {loading && (
-            <div style={{ margin: "60px 0" }}>
-              <Spinner small />
-            </div>
-          )}
+
           <UserDataTabs
+            openNewPostClick={this.handleClick("newPostModal")}
             posts={posts}
             isCurrent={currentUser._id === user._id}
             user={user}

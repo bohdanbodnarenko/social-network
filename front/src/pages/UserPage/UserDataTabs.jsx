@@ -4,32 +4,15 @@ import { withStyles } from "@material-ui/core/styles";
 import SwipeableViews from "react-swipeable-views";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
 import { Paper, Button } from "@material-ui/core";
-import UsersList from "../../UI/UsersList/UsersList";
-
-function TabContainer({ children, dir }) {
-  return (
-    <Typography
-      component="div"
-      dir={dir}
-      style={{ padding: 8 * 3, maxHeight: 600, overflowY: "scroll" }}
-    >
-      {children}
-    </Typography>
-  );
-}
-
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-  dir: PropTypes.string.isRequired
-};
+import UsersList from "../../components/UsersList/UsersList";
+import PostsList from "../../components/PostsList/PostsList";
+import { TabContentWrapper } from "./styles";
 
 const styles = theme => ({
   root: {
     width: "90vw",
-
-    margin: "40px 0px"
+    margin: "40px 0px 20px 0"
   }
 });
 
@@ -47,7 +30,7 @@ class UserDataTabs extends React.Component {
   };
 
   render() {
-    const { classes, theme, user, posts, isCurrent } = this.props;
+    const { classes, user, posts, isCurrent } = this.props;
     return (
       <Paper className={classes.root}>
         <Tabs
@@ -62,20 +45,27 @@ class UserDataTabs extends React.Component {
           <Tab label={`${user.following.length} Following`} />
         </Tabs>
         <SwipeableViews
-          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}>
-            {isCurrent && <Button>Create Post</Button>}
-            <div>Posts will be here</div>
-          </TabContainer>
-          <TabContainer dir={theme.direction}>
+          <TabContentWrapper>
+            {isCurrent && (
+              <Button onClick={this.props.openNewPostClick}>Create Post</Button>
+            )}
+            <TabContentWrapper>
+              {posts && posts.length > 0 ? (
+                <PostsList posts={posts} />
+              ) : (
+                `${user.name} have not any post yet`
+              )}
+            </TabContentWrapper>
+          </TabContentWrapper>
+          <TabContentWrapper>
             <UsersList users={user.followers} />
-          </TabContainer>
-          <TabContainer dir={theme.direction}>
+          </TabContentWrapper>
+          <TabContentWrapper>
             <UsersList users={user.following} />
-          </TabContainer>
+          </TabContentWrapper>
         </SwipeableViews>
       </Paper>
     );
@@ -83,8 +73,7 @@ class UserDataTabs extends React.Component {
 }
 
 UserDataTabs.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(UserDataTabs);

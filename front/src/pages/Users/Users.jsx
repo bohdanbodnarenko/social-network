@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as Styles from "./styles";
 import { getUsers } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
-import SingleUser from "./SingleUser";
+import SingleUser from "../../components/SingleUser/SingleUser";
 
 export class Users extends Component {
   state = {
@@ -20,7 +20,7 @@ export class Users extends Component {
   render() {
     const { users, loading } = this.state;
     if (!users || loading) {
-      return <Spinner size={100}/>;
+      return <Spinner size={100} />;
     }
     return (
       <div>

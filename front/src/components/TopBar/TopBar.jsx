@@ -21,7 +21,7 @@ import {
   CustomLink,
   CloseWrapper
 } from "./styles";
-import { Button } from "@material-ui/core";
+import { Button, Fab } from "@material-ui/core";
 import Signup from "./Signup";
 import Login from "./Login";
 import { logout } from "../../store/auth/actions";
@@ -111,7 +111,7 @@ export class TopBar extends Component {
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton>
+          <IconButton color="primary">
             <Badge badgeContent={4} color="secondary">
               <MailIcon />
             </Badge>
@@ -119,9 +119,9 @@ export class TopBar extends Component {
           <p>Messages</p>
         </MenuItem>
         <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton>
+          <IconButton color="primary">
             <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
+              <NotificationsIcon color="primary" />
             </Badge>
           </IconButton>
           <p>Notifications</p>
@@ -149,15 +149,20 @@ export class TopBar extends Component {
       { name: "Home", path: "/" }
     ];
     const renderSideMenu = (
-      <SideMenu onClick={this.handleClick("menuOpen")} open={menuOpen}>
+      <SideMenu
+        color="primary"
+        onClick={this.handleClick("menuOpen")}
+        open={menuOpen}
+        className="primaryText"
+      >
         <IconButton onClick={this.handleClick("menuOpen")}>
           <MenuRounded />
         </IconButton>
         {menuOpen && (
           <LinksWrapper>
             <CloseWrapper>
-              <IconButton>
-                <CloseRounded />
+              <IconButton className="primaryText">
+                <CloseRounded className="primaryText" />
               </IconButton>
             </CloseWrapper>
             {links.map(link => (
@@ -199,14 +204,14 @@ export class TopBar extends Component {
                   >
                     Login
                   </Button>
-                  <Button
+                  <Fab
                     onClick={this.handleClick("signupOpen")}
-                    variant="contained"
+                    variant="extended"
                     color="primary"
                     className={classes.button}
                   >
                     <span className="whiteText">Sign up</span>
-                  </Button>
+                  </Fab>
                 </Fragment>
               ) : (
                 <Fragment>

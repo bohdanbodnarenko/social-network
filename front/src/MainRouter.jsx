@@ -5,6 +5,7 @@ import UserPage from "./pages/UserPage/UserPage";
 import Users from "./pages/Users/Users";
 import Messages from "./pages/Messages/Messages";
 import Feed from "./pages/Feed/Feed";
+import PostPage from "./pages/PostPage/PostPage";
 const MainRouter = () => {
   return (
     <div>
@@ -14,6 +15,7 @@ const MainRouter = () => {
         <Route path="/messages" exact component={Messages} />
         <Route path="/feed" exact component={Feed} />
         <Route path="/user/:userId" exact component={UserPage} />
+        <Route path="/post/:postId" exact component={PostPage} />
       </Switch>
     </div>
   );

@@ -1,15 +1,13 @@
 const User = require("../models/user");
 const _ = require("lodash"),
   jwt = require("jsonwebtoken"),
-  {
-    IncomingForm
-  } = require("formidable"),
+  { IncomingForm } = require("formidable"),
   fs = require("fs");
 
 exports.userById = (req, res, next, id) => {
   User.findById(id)
-    .populate('following', '_id name')
-    .populate('followers', '_id name')
+    .populate("following", "_id name")
+    .populate("followers", "_id name")
     .exec((err, user) => {
       if (err || !user) {
         return res.status(404).json({
@@ -22,9 +20,7 @@ exports.userById = (req, res, next, id) => {
 };
 
 exports.confirmPassword = (req, res) => {
-  const {
-    password
-  } = req.body;
+  const { password } = req.body;
   User.findById(req.auth._id).exec((err, user) => {
     if (err || !user) {
       return res.status(404).json({
@@ -51,9 +47,7 @@ exports.allUsers = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  const {
-    profile
-  } = req;
+  const { profile } = req;
   profile.hashed_password = undefined;
   profile.salt = undefined;
   res.json(profile);
@@ -85,7 +79,7 @@ exports.updateUser = (req, res, next) => {
       user.photo.contentType = files.photo.type;
     }
 
-    user.save(error => {
+    user.save((error, result) => {
       if (err) {
         return res.status(400).json({
           error
@@ -119,23 +113,27 @@ exports.deleteUser = (req, res, next) => {
   });
 };
 
-//follow 
+//follow
 exports.addFollowing = (req, res, next) => {
-  User.findOneAndUpdate({
-    _id: req.body.userId
-  }, {
-    $push: {
-      following: req.body.followId
+  User.findOneAndUpdate(
+    {
+      _id: req.body.userId
+    },
+    {
+      $addToSet: {
+        following: req.body.followId
+      }
+    },
+    (error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error
+        });
+      }
+      next();
     }
-  }, (error, result) => {
-    if (error) {
-      return res.status(400).json({
-        error
-      })
-    }
-    next()
-  })
-}
+  );
+};
 
 exports.addFollower = (req, res) => {
   User.find({
@@ -143,72 +141,84 @@ exports.addFollower = (req, res) => {
     _id: req.body.followId
   }).exec((err, followersArr) => {
     if (followersArr.length === 0) {
-      User.findOneAndUpdate({
+      User.findOneAndUpdate(
+        {
           _id: req.body.followId
-        }, {
+        },
+        {
           $addToSet: {
             followers: req.body.userId
           }
-        }, (error, result) => {
-          console.log(result)
+        },
+        (error, result) => {
+          console.log(result);
           if (error) {
             return res.status(400).json({
               error
-            })
+            });
           }
-        })
-        .populate('following', '_id name')
-        .populate('followers', '_id name')
+        }
+      )
+        .populate("following", "_id name")
+        .populate("followers", "_id name")
         .exec((error, result) => {
           if (error) {
             return res.status(400).json({
               error
-            })
+            });
           }
           result.hashed_password = undefined;
           result.salt = undefined;
-          return res.json(result)
-        })
+          return res.json(result);
+        });
     }
-  })
-}
+  });
+};
 exports.removeFollowing = (req, res, next) => {
-  User.findOneAndUpdate({
-    _id: req.body.userId
-  }, {
-    $pull: {
-      following: req.body.followId
+  User.findOneAndUpdate(
+    {
+      _id: req.body.userId
+    },
+    {
+      $pull: {
+        following: req.body.followId
+      }
+    },
+    (error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error
+        });
+      }
+      next();
     }
-  }, (error, result) => {
-    if (error) {
-      return res.status(400).json({
-        error
-      })
-    }
-    next()
-  })
-}
+  );
+};
 
 exports.removeFollower = (req, res) => {
-  User.findOneAndUpdate({
+  User.findOneAndUpdate(
+    {
       _id: req.body.followId
-    }, {
+    },
+    {
       $pull: {
         followers: req.body.userId
       }
-    }, {
+    },
+    {
       new: true
-    })
-    .populate('following', '_id name')
-    .populate('followers', '_id name')
+    }
+  )
+    .populate("following", "_id name")
+    .populate("followers", "_id name")
     .exec((error, result) => {
       if (error) {
         return res.status(400).json({
           error
-        })
+        });
       }
       result.hashed_password = undefined;
       result.salt = undefined;
-      return res.json(result)
-    })
-}
+      return res.json(result);
+    });
+};

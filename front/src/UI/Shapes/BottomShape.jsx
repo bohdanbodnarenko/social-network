@@ -1,21 +1,22 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Shape from "./Shape";
+import { colors } from "../../theme";
 
 class TopShape extends Component {
   state = { path: "polygon(100% 0, 100% 15%, 0 52%, 0 29%, 0 0)" };
   getClipPath = locationPath => {
     switch (locationPath) {
       case "users":
-        return "polygon(66% 93%, 100% 100%, 59% 100%, 0 100%, 55% 77%)";
+        return "polygon(38% 88%, 72% 69%, 100% 80%, 100% 100%, 79% 86%, 52% 100%, 0 100%, 0 94%);";
       case "feed":
-        return "polygon(56% 91%, 66% 100%, 0 100%, 31% 88%, 50% 75%)";
+        return "polygon(14% 87%, 43% 81%, 99% 70%, 100% 100%, 94% 93%, 26% 100%, 0 100%, 2% 75%);";
       case "messages":
-        return "polygon(36% 96%, 41% 100%, 0 100%, 0 86%, 38% 79%)";
+        return "polygon(31% 62%, 56% 82%, 100% 77%, 100% 100%, 56% 94%, 29% 80%, 0 100%, 0 78%);";
       case "user":
-        return "polygon(100% 91%, 100% 100%, 27% 100%, 50% 93%, 67% 81%)";
+        return "polygon(26% 74%, 48% 88%, 100% 80%, 100% 100%, 52% 100%, 26% 91%, 0 100%, 0 84%);";
       default:
-        return "polygon(47% 91%, 66% 100%, 0 100%, 0 79%, 14% 87%)";
+        return "polygon(29% 84%, 62% 71%, 100% 84%, 100% 100%, 66% 92%, 32% 97%, 0 100%, 0 84%);";
     }
   };
 
@@ -35,8 +36,8 @@ class TopShape extends Component {
     const { path } = this.state;
     return (
       <div>
-        <Shape bg="#03a9f4" transition="0.75" path={path} />
-        <Shape bg="#faa916" transition="0.8" path={path} />
+        <Shape bg={colors.middlePurple} transition="0.75" path={path} />
+        <Shape bg={colors.lightPurple} transition="0.8" path={path} />
       </div>
     );
   }
