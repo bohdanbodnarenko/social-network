@@ -107,12 +107,19 @@ class SinglePost extends Component {
 
   submitNewPost = text => async event => {
     event.preventDefault();
+    this.setState({ loading: true });
     const res = await addComment(
       text,
       this.props.post._id,
       this.props.currentUser._id
     );
-    console.log(res);
+    if (res) {
+      this.setState({
+        loading: false,
+        newCommentModal: false,
+        commentText: ""
+      });
+    }
   };
 
   deletePost = id => async () => {
@@ -151,6 +158,7 @@ class SinglePost extends Component {
             onSubmit={this.submitNewPost(commentText)}
             className={classes.commentModal}
           >
+            {loading && <Spinner small />}
             <DialogTitle>Add a new comment</DialogTitle>
             <DialogContent>
               <FormControl className={classes.formControl} fullWidth>
@@ -171,13 +179,14 @@ class SinglePost extends Component {
             </DialogContent>
             <DialogActions>
               <Button
+                disabled={loading}
                 variant="contained"
                 fullWidth
                 type="submit"
                 color="primary"
                 onClick={this.submitNewPost(commentText)}
               >
-                Yes
+                Submit
               </Button>
             </DialogActions>
           </form>
@@ -186,7 +195,7 @@ class SinglePost extends Component {
           <CardHeader
             className={classes.header}
             avatar={
-              <Avatar
+              post.postedBy && <Avatar
                 src={
                   post.postedBy.photo
                     ? getLinkToUserAvatar(post.postedBy._id)

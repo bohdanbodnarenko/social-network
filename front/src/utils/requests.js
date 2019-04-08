@@ -78,3 +78,4 @@ export const unlikePost = async (postId, userId) =>
   httpService.put("/post/unlike", { postId, userId });
 export const addComment = async (text, postId, userId) =>
   httpService.put("/post/comment", { comment: { text }, postId, userId });
+export const getAllPosts = async () => httpService.get("/posts");

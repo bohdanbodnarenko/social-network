@@ -1,10 +1,53 @@
-import styled from "styled-components";
-
-export const Shape = styled.div`
-  position: fixed;
-  min-height: 100%;
-  width: 102%;
-  background: #03a9f4;
-  clip-path: polygon(13% 0, 100% 24%, 84% 100%, 0 24%);
-  z-index: -1;
-`;
+export const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  iOSSwitchBase: {
+    "&$iOSChecked": {
+      color: theme.palette.common.white,
+      "& + $iOSBar": {
+        backgroundColor: theme.palette.primary
+      }
+    },
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest,
+      easing: theme.transitions.easing.sharp
+    })
+  },
+  iOSChecked: {
+    transform: "translateX(15px)",
+    "& + $iOSBar": {
+      opacity: 1,
+      border: "none"
+    }
+  },
+  iOSBar: {
+    borderRadius: 13,
+    width: 42,
+    height: 26,
+    marginTop: -13,
+    marginLeft: -21,
+    border: "solid 1px",
+    borderColor: theme.palette.grey[400],
+    backgroundColor: theme.palette.grey[50],
+    opacity: 1,
+    transition: theme.transitions.create(["background-color", "border"])
+  },
+  iOSIcon: {
+    width: 24,
+    height: 24
+  },
+  iOSIconChecked: {
+    boxShadow: theme.shadows[1]
+  },
+  switchWrapper: {
+    display: "flex",
+    justifyContent: "center",
+    width: 350
+  },
+  postsWrapper: {
+    width: "90vw"
+  }
+});
