@@ -1,5 +1,7 @@
 const Post = require("../models/post"),
-  { IncomingForm } = require("formidable"),
+  {
+    IncomingForm
+  } = require("formidable"),
   fs = require("fs"),
   _ = require("lodash"),
   jwt = require("jsonwebtoken"),
@@ -7,8 +9,10 @@ const Post = require("../models/post"),
 
 exports.getPosts = (req, res) => {
   const posts = Post.find()
+    .sort({
+      created: -1
+    })
     .populate("postedBy", "_id name ")
-    .populate("comments", "text created")
     .then(posts => {
       res.json({
         posts
@@ -48,11 +52,12 @@ exports.createPost = async (req, res, next) => {
 
 exports.postsByUser = (req, res) => {
   Post.find({
-    postedBy: req.profile._id
-  })
+      postedBy: req.profile._id
+    })
     .populate("postedBy", "_id name photo")
-    .populate("comments", "text created")
-    .sort({ created: -1 })
+    .sort({
+      created: -1
+    })
     .exec((error, posts) => {
       if (error) {
         return res.status(400).json({
@@ -65,8 +70,7 @@ exports.postsByUser = (req, res) => {
 
 exports.postById = (req, res, next, id) => {
   Post.findById(id)
-    .populate("postedBy", "id name")
-    // .populate("comments", "_id text created")
+    .populate("postedBy", "id name photo")
     .populate("comments.postedBy", "_id name photo")
     .exec((error, post) => {
       if (error || !post) {
@@ -102,94 +106,165 @@ exports.isPoster = (req, res, next) => {
   if (req.post.postedBy._id != req.auth._id) {
     return res
       .status(403)
-      .json({ error: "You are not the creator of this post!" });
+      .json({
+        error: "You are not the creator of this post!"
+      });
   }
   next();
 };
 
 exports.getPostById = (req, res) => {
-  const { post } = req;
+  const {
+    post
+  } = req;
   if (!post) {
-    return res.status(404).json({ error: "Post not found!" });
+    return res.status(404).json({
+      error: "Post not found!"
+    });
   }
-  res.json({ post });
+  res.json({
+    post
+  });
 };
 
 exports.deletePost = (req, res, next) => {
   let post = req.post;
   post.remove((error, post) => {
     if (error) {
-      return res.status(400).json({ error });
+      return res.status(400).json({
+        error
+      });
     }
-    res.json({ message: "Post deleted successfully" });
+    res.json({
+      message: "Post deleted successfully"
+    });
   });
 };
 
 exports.like = (req, res) => {
-  Post.findOneAndUpdate(
-    { _id: req.body.postId },
-    {
-      $addToSet: { likes: req.body.userId }
-    },
-    { new: true }
-  ).exec((error, result) => {
-    if (error) {
-      return res.status(400).json({ error });
+  Post.findOneAndUpdate({
+    _id: req.body.postId
+  }, {
+    $addToSet: {
+      likes: req.body.userId
     }
-    res.json({ result });
+  }, {
+    new: true
+  }).exec((error, result) => {
+    if (error) {
+      return res.status(400).json({
+        error
+      });
+    }
+    res.json({
+      result
+    });
   });
 };
 
 exports.unlike = (req, res) => {
   Post.findByIdAndUpdate(
-    req.body.postId,
-    {
-      $pull: { likes: req.body.userId }
-    },
-    { new: true }
+    req.body.postId, {
+      $pull: {
+        likes: req.body.userId
+      }
+    }, {
+      new: true
+    }
   ).exec((error, result) => {
     if (error) {
-      return res.status(400).json({ error });
+      return res.status(400).json({
+        error
+      });
     }
-    res.json({ result });
+    res.json({
+      result
+    });
   });
 };
 
 exports.comment = (req, res) => {
   let comment = req.body.comment;
   comment.postedBy = req.body.userId;
-  Post.findOneAndUpdate(
-    { _id: req.body.postId },
-    {
-      $push: { comments: comment }
-    },
-    { new: true }
-  )
+  Post.findOneAndUpdate({
+      _id: req.body.postId
+    }, {
+      $push: {
+        comments: comment
+      },
+      $inc: {
+        commentsCount: 1
+      }
+    }, {
+      new: true
+    })
     .populate("comments.postedBy", "_id name photo")
     .populate("postedBy", "_id name photo")
     .exec((error, result) => {
       if (error) {
-        return res.status(400).json({ error });
+        return res.status(400).json({
+          error
+        });
       }
-      res.json({ result });
+      res.json({
+        result
+      });
     });
 };
 
 exports.uncomment = (req, res) => {
   let comment = req.body.comment;
-  Post.findOneAndUpdate(
-    { _id: req.body.postId },
-    {
-      $pull: { comments: { _id: comment._id } }
-    },
-    { new: true }
-  )
+  Post.findOneAndUpdate({
+      _id: req.body.postId
+    }, {
+      $pull: {
+        comments: {
+          _id: comment._id
+        }
+      },
+      $inc: {
+        commentsCount: -1
+      }
+    }, {
+      new: true
+    })
     .populate("comments.postedBy", "_id name photo")
     .populate("postedBy", "_id name photo")
     .exec((error, result) => {
       if (error) {
-        return res.status(400).json({ error });
+        return res.status(400).json({
+          error
+        });
       }
-      res.json({ result });
+      res.json({
+        result
+      });
     });
 };
+
+exports.getPostsFollowing = (req, res) => {
+  User.findById(req.auth._id, (error, result) => {
+    if (error) {
+      return res.status(400).json({
+        error
+      });
+    }
+    const {
+      following
+    } = result;
+    Post.find({
+      postedBy: {
+        $in: following
+      }
+    }, (err, posts) => {
+      if (err) {
+        return res.status(400).json({
+          err
+        });
+      }
+      res.json({
+        posts
+      });
+    })
+  })
+}

@@ -3,12 +3,12 @@ import { styles } from "./styles";
 import { withStyles, Switch } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import PostsList from "../../components/PostsList/PostsList";
-import { getAllPosts } from "../../utils/requests";
+import { getAllPosts, getFollowingPosts } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
 
 export class Feed extends Component {
   state = {
-    onlySubcr: true,
+    onlyFollowing: true,
     posts: [],
     loading: true
   };
@@ -17,10 +17,27 @@ export class Feed extends Component {
     this.setState({ [name]: event.target.checked });
   };
 
-  componentDidMount = async () => {
-    const { data } = await getAllPosts();
-    this.setState({ loading: false, posts: data.posts });
-    console.log(data.posts);
+  componentDidUpdate = (prevProps, prevState) => {
+    if (!this.state.onlyFollowing === prevState.onlyFollowing) {
+      this.getPosts();
+    }
+  };
+
+  getPosts = async () => {
+    this.setState({ loading: true });
+    if (this.state.onlyFollowing) {
+      const { data } = await getFollowingPosts();
+      console.log(data);
+      this.setState({ loading: false, posts: data.posts });
+    } else {
+      const { data } = await getAllPosts();
+      console.log(data);
+      this.setState({ loading: false, posts: data.posts });
+    }
+  };
+
+  componentDidMount = () => {
+    this.getPosts();
   };
 
   render() {
@@ -30,7 +47,7 @@ export class Feed extends Component {
       <div className={classes.root}>
         <div className={classes.switchWrapper}>
           <FormControlLabel
-            label="Switch only subscriptions/all posts"
+            label="Only following/all posts"
             control={
               <Switch
                 classes={{
@@ -41,16 +58,16 @@ export class Feed extends Component {
                   checked: classes.iOSChecked
                 }}
                 disableRipple
-                checked={this.state.onlySubcr}
-                onChange={this.handleChange("onlySubcr")}
-                value="onlySubcr"
+                checked={this.state.onlyFollowing}
+                onChange={this.handleChange("onlyFollowing")}
+                value="onlyFollowing"
               />
             }
           />
         </div>
         <div className={classes.postsWrapper}>
           {loading ? <Spinner small /> : <PostsList posts={posts} />}
-          <PostsList posts={posts} />
+          {/* <PostsList posts={posts} /> */}
         </div>
       </div>
     );

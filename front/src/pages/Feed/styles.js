@@ -48,6 +48,6 @@ export const styles = theme => ({
     width: 350
   },
   postsWrapper: {
-    width: "90vw"
+    width: "95vw"
   }
 });

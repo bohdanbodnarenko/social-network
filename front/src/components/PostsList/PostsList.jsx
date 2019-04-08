@@ -10,7 +10,9 @@ const styles = theme => ({
     dispay: "flex",
     alignItems: "center",
     flexWrap: "wrap",
-    justifyContent: "center"
+    justifyContent: "center",
+    padding: "20px 10px",
+    borderRadius: "10px"
   },
   card: {
     margin: 15,

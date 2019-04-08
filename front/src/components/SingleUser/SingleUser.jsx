@@ -45,12 +45,12 @@ const SingleUser = props => {
       </Link>
       <CardActions>
         <Link to={`/messages/${user._id}`}>
-          <Button size="small" color="primary">
+          <Button size="small" >
             Message
           </Button>
         </Link>
         <Link to={`/user/${user._id}`}>
-          <Button size="small" color="primary">
+          <Button size="small" >
             Profile
           </Button>
         </Link>

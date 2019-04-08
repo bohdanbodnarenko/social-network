@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -12,7 +13,7 @@ const SingleComment = ({ comment }) => {
   return (
     <ListItem
       divider
-      style={{ width: "89vw", marginBottom: "10px" }}
+      style={{ width: "89vw", margin: "10px 0" }}
       alignItems="center"
     >
       <ListItemAvatar>
@@ -22,7 +23,11 @@ const SingleComment = ({ comment }) => {
         />
       </ListItemAvatar>
       <ListItemText
-        primary={comment.postedBy.name}
+        primary={
+          <Link to={`/user/${comment.postedBy._id}`}>
+            {comment.postedBy.name}
+          </Link>
+        }
         secondary={
           <React.Fragment>
             <Typography component="span" color="textPrimary">

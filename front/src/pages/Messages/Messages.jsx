@@ -3,11 +3,7 @@ import React, { Component } from "react";
 
 export class Messages extends Component {
   render() {
-    return (
-      <div>
-        This is my users
-      </div>
-    );
+    return <div>Comming soon...</div>;
   }
 }
 

@@ -19,7 +19,7 @@ export class PostPage extends Component {
     if (!post) {
       return <Spinner />;
     }
-    return <SinglePost post={post} />;
+    return <SinglePost withComments post={post} />;
   }
 }
 

@@ -5,7 +5,6 @@ import {
   DialogTitle,
   Button,
   DialogActions,
-  Icon,
   TextField,
   DialogContent,
   FormControl,
@@ -32,10 +31,14 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import ShareIcon from "@material-ui/icons/Share";
 import moment from "moment";
-import { Delete, Comment } from "@material-ui/icons";
+import {
+  Delete,
+  Comment,
+  Favorite,
+  FavoriteBorderOutlined
+} from "@material-ui/icons";
 import Spinner from "../../UI/Spinner/Spinner";
 import red from "@material-ui/core/colors/red";
-import { colors } from "../../theme";
 import CommentsList from "../CommentsList/CommentsList";
 
 const styles = theme => ({
@@ -132,8 +135,7 @@ class SinglePost extends Component {
 
   render() {
     const { deleteModal, loading, newCommentModal, commentText } = this.state;
-    const { classes, post, currentUser } = this.props;
-    console.log(post);
+    const { classes, post, currentUser, withComments } = this.props;
     return (
       <div>
         {loading && <Spinner small />}
@@ -195,13 +197,15 @@ class SinglePost extends Component {
           <CardHeader
             className={classes.header}
             avatar={
-              post.postedBy && <Avatar
-                src={
-                  post.postedBy.photo
-                    ? getLinkToUserAvatar(post.postedBy._id)
-                    : "https://www.gravatar.com/avatar?d=mp&s=200"
-                }
-              />
+              post.postedBy && (
+                <Avatar
+                  src={
+                    post.postedBy.photo
+                      ? getLinkToUserAvatar(post.postedBy._id)
+                      : "https://www.gravatar.com/avatar?d=mp&s=200"
+                  }
+                />
+              )
             }
             title={
               <Link to={`/user/${post.postedBy._id}`}>
@@ -230,23 +234,20 @@ class SinglePost extends Component {
               onClick={this.handleLikeClick(post._id, currentUser._id)}
               aria-label="Like"
             >
-              <Icon
-                style={{
-                  color: this.checkIsLiked() ? colors.lightPurple : "white"
-                }}
-              >
-                {this.checkIsLiked() ? "favorite" : "favorite_outlined"}
-              </Icon>
+              {this.checkIsLiked() ? (
+                <Favorite color="secondary" />
+              ) : (
+                <FavoriteBorderOutlined />
+              )}
             </IconButton>
             {post.likes.length}
             <IconButton
-              color="secondary"
               onClick={this.toggleModal("newCommentModal")}
               aria-label="Comment"
             >
               <Comment />
             </IconButton>
-            {post.comments.length}
+            {post.commentsCount}
             <IconButton aria-label="Share">
               <ShareIcon />
             </IconButton>
@@ -256,10 +257,12 @@ class SinglePost extends Component {
               </IconButton>
             )}
           </CardActions>
+          {withComments && (
+            <Paper style={{ width: "90vw", margin: "auto" }}>
+              <CommentsList comments={post.comments} />
+            </Paper>
+          )}
         </Card>
-        <Paper style={{ width: "90vw", margin: "auto" }}>
-          <CommentsList comments={post.comments} />
-        </Paper>
       </div>
     );
   }

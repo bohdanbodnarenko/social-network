@@ -73,9 +73,22 @@ export const unfollowFromUser = async (followId, userId) => {
 export const createPost = async userdata => httpService.post("/post", userdata);
 export const getPost = async id => httpService.get(`/post/${id}`);
 export const likePost = async (postId, userId) =>
-  httpService.put("/post/like", { postId, userId });
+  httpService.put("/post/like", {
+    postId,
+    userId
+  });
 export const unlikePost = async (postId, userId) =>
-  httpService.put("/post/unlike", { postId, userId });
+  httpService.put("/post/unlike", {
+    postId,
+    userId
+  });
 export const addComment = async (text, postId, userId) =>
-  httpService.put("/post/comment", { comment: { text }, postId, userId });
+  httpService.put("/post/comment", {
+    comment: {
+      text
+    },
+    postId,
+    userId
+  });
 export const getAllPosts = async () => httpService.get("/posts");
+export const getFollowingPosts = async () => httpService.get("/posts/following");

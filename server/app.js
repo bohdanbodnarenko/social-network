@@ -6,7 +6,9 @@ const express = require("express"),
   cookieParser = require("cookie-parser"),
   userRoutes = require("./routes/user"),
   fs = require("fs"),
-  cors = require("cors");
+  cors = require("cors"),
+  http = require('http').Server(app),
+  io = require('socket.io')(http);
 
 //Config env
 const dotenv = require("dotenv");
@@ -20,7 +22,9 @@ app.use(cors());
 app.get("/", (req, res) => {
   fs.readFile("docs/apiDocs.json", (error, data) => {
     if (error) {
-      res.status(400).json({ error });
+      res.status(400).json({
+        error
+      });
     }
     const docs = JSON.parse(data);
     res.json(docs);
@@ -41,6 +45,15 @@ const authRoutes = require("./routes/auth");
 app.use("/", postRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
+
+// io.on('connection', (client) => {
+//   console.log(client)
+//   client.on('like', data => {
+//     console.log(data)
+//   });
+// });
+
+io.emit('like', 'data from server');
 
 const port = process.env.PORT || 8080;
 
