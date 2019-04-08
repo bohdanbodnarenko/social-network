@@ -46,15 +46,13 @@ app.use("/", postRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 
-// io.on('connection', (client) => {
-//   console.log(client)
-//   client.on('like', data => {
-//     console.log(data)
-//   });
-// });
-
-io.emit('like', 'data from server');
+io.on('connection', client => {
+  console.log('a user is connected')
+  if (client) {
+    client.emit('hello', 'data')
+  }
+})
 
 const port = process.env.PORT || 8080;
 
-app.listen(port, () => console.log(`Api is listening on port: ${port}`));
+http.listen(port, () => console.log(`Api is listening on port: ${port}`));

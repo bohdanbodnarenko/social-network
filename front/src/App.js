@@ -8,18 +8,17 @@ import store from "./store/store";
 import TopShape from "./UI/Shapes/TopShape";
 import BottomShape from "./UI/Shapes/BottomShape";
 import { theme } from "./theme";
-import openSocket from "socket.io-client";
+import io from "socket.io-client";
 
-// const socket = openSocket("http://localhost:8080");
 export const history = createBrowserHistory();
+const socket = io.connect('ws://localhost:8080');
+socket.on("hello", data => console.log(data));
 class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     console.log(history);
   }
 
   render() {
-    // socket.on("like", data => console.log(data));
-    // socket.emit("like", "some data");
     setupInterceptors(store, history);
     return (
       <Fragment>

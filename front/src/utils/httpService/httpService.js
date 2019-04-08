@@ -3,7 +3,7 @@ import { logout } from "../../store/auth/actions";
 
 const httpService = axios.create({
   //   baseURL: process.env.REACT_APP_API_ENDPOINT || window.location.origin,
-  baseURL: "http://localhost:8080",
+  baseURL: process.env.REACT_APP_API_ENDPOINT,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

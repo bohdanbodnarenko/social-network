@@ -5,7 +5,8 @@ const Post = require("../models/post"),
   fs = require("fs"),
   _ = require("lodash"),
   jwt = require("jsonwebtoken"),
-  User = require("../models/user");
+  User = require("../models/user"),
+  io = require('../app')
 
 exports.getPosts = (req, res) => {
   const posts = Post.find()
@@ -122,6 +123,7 @@ exports.getPostById = (req, res) => {
       error: "Post not found!"
     });
   }
+
   res.json({
     post
   });
