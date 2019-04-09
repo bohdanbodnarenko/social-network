@@ -15,6 +15,8 @@ class TopShape extends Component {
         return "polygon(34% 8%, 63% 20%, 100% 0, 100% 28%, 63% 41%, 30% 25%, 0 28%, 0 11%);";
       case "user":
         return "polygon(26% 21%, 61% 18%, 100% 28%, 100% 46%, 63% 41%, 24% 49%, 0 40%, 0 11%)";
+      case "":
+        return "polygon(0 0)";
       default:
         return "polygon(28% 0, 57% 6%, 100% 0, 100% 21%, 65% 24%, 32% 33%, 0 28%, 0 11%);";
     }
