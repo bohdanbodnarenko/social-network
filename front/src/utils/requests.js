@@ -1,25 +1,7 @@
 import httpService from "./httpService/httpService";
 
-export const getUserById = async id => {
-  const res = await httpService.get(`user/${id}`);
-  if (res) {
-    return res.data;
-  }
-};
-
-export const getPostsByUser = async id => {
-  const res = await httpService.get(`posts/${id}`);
-  if (res) {
-    return res.data;
-  }
-};
-
-export const getUsers = async id => {
-  const res = await httpService.get(`users`);
-  if (res) {
-    return res.data;
-  }
-};
+export const signout = async () => httpService.get("signout")
+export const signin = async (dataToSend) => httpService.get("signin", dataToSend)
 
 export const confirmPassword = async password => {
   const res = await httpService.post("user/confirm", {
@@ -71,7 +53,6 @@ export const unfollowFromUser = async (followId, userId) => {
 };
 
 export const createPost = async userdata => httpService.post("/post", userdata);
-export const getPost = async id => httpService.get(`/post/${id}`);
 export const likePost = async (postId, userId) =>
   httpService.put("/post/like", {
     postId,
@@ -90,5 +71,3 @@ export const addComment = async (text, postId, userId) =>
     postId,
     userId
   });
-export const getAllPosts = async () => httpService.get("/posts");
-export const getFollowingPosts = async () => httpService.get("/posts/following");

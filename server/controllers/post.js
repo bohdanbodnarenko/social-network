@@ -6,8 +6,7 @@ const Post = require("../models/post"),
   _ = require("lodash"),
   jwt = require("jsonwebtoken"),
   User = require("../models/user"),
-  io = require('../app')
-
+  io = require("socket.io");
 exports.getPosts = (req, res) => {
   const posts = Post.find()
     .sort({
@@ -123,7 +122,7 @@ exports.getPostById = (req, res) => {
       error: "Post not found!"
     });
   }
-
+  req.app.io.emit('hello', 'data from post')
   res.json({
     post
   });
@@ -258,7 +257,7 @@ exports.getPostsFollowing = (req, res) => {
       postedBy: {
         $in: following
       }
-    }, (err, posts) => {
+    }).populate("postedBy", "_id name photo").exec((err, posts) => {
       if (err) {
         return res.status(400).json({
           err

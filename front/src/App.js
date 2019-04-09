@@ -8,11 +8,8 @@ import store from "./store/store";
 import TopShape from "./UI/Shapes/TopShape";
 import BottomShape from "./UI/Shapes/BottomShape";
 import { theme } from "./theme";
-import io from "socket.io-client";
 
 export const history = createBrowserHistory();
-const socket = io.connect('ws://localhost:8080');
-socket.on("hello", data => console.log(data));
 class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     console.log(history);

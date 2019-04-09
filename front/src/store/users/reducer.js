@@ -1,25 +1,28 @@
-const initState = {};
+import {
+  SET_USERS,
+  SET_SELECTED_USER
+} from "./types";
 
-const authReducer = (state = initState, action) => {
+const initState = {
+  users: [],
+  selectedUser: null
+};
+
+const usersReducer = (state = initState, action) => {
   switch (action.type) {
-    case SIGN_IN_SUCCESS:
+    case SET_USERS:
       return {
         ...state,
-        token: action.payload.token,
-        auth: true,
-        currentUser: action.payload.user
-      };
-    case LOGOUT_SUCCESS:
+        users: action.payload
+      }
+    case SET_SELECTED_USER:
       return {
         ...state,
-        token: "",
-        auth: false,
-        currentUser: ""
-      };
-
+        selectedUser: action.payload
+      }
     default:
       return state;
   }
 };
 
-export default authReducer;
+export default usersReducer;

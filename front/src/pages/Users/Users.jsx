@@ -1,26 +1,21 @@
 import React, { Component } from "react";
 import * as Styles from "./styles";
-import { getUsers } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
 import SingleUser from "../../components/SingleUser/SingleUser";
-
+import { connect } from "react-redux";
+import { getAllUsers } from "../../store/users/actions";
 export class Users extends Component {
   state = {
-    users: null,
-    loading: true
+    users: null
   };
   componentDidMount = () => {
-    getUsers().then(({ users }) => {
-      if (users) {
-        this.setState({ users, loading: false });
-      }
-    });
+    this.props.getUsers();
   };
 
   render() {
-    const { users, loading } = this.state;
-    if (!users || loading) {
-      return <Spinner size={100} />;
+    const { users } = this.props;
+    if (users.length < 1) {
+      return <Spinner />;
     }
     return (
       <div>
@@ -34,4 +29,15 @@ export class Users extends Component {
   }
 }
 
-export default Users;
+const mapStateToProps = ({ users }) => ({
+  users: users.users
+});
+
+const mapDispatchToProps = dispatch => ({
+  getUsers: () => dispatch(getAllUsers())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Users);

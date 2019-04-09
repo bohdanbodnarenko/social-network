@@ -10,6 +10,7 @@ const express = require("express"),
   http = require('http').Server(app),
   io = require('socket.io')(http);
 
+app.io = io;
 //Config env
 const dotenv = require("dotenv");
 dotenv.config();
@@ -45,10 +46,11 @@ const authRoutes = require("./routes/auth");
 app.use("/", postRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
-
+exports.client = null;
 io.on('connection', client => {
   console.log('a user is connected')
   if (client) {
+    client = client
     client.emit('hello', 'data')
   }
 })

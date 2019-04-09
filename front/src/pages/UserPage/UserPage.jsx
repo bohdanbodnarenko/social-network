@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import {
-  getUserById,
   confirmPassword,
   deleteAccount,
   updateAccount,
   getLinkToUserAvatar,
   followToUser,
-  unfollowFromUser,
-  getPostsByUser
+  unfollowFromUser
 } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
 import * as Styles from "./styles";
@@ -20,14 +18,16 @@ import { logout } from "../../store/auth/actions";
 import UpdatePopup from "./UpdatePopup";
 import UserDataTabs from "./UserDataTabs";
 import NewPostModal from "../../components/NewPostModal/NewPostModal";
+import { getUserById } from "../../store/users/actions";
+import { getPostsByUserId } from "../../store/posts/actions";
 export class UserPage extends Component {
   state = {
-    user: null,
+    user: this.props.user,
     deletePopup: false,
     updatePopup: false,
-    loading: false,
+    loading: true,
     passwordError: "",
-    posts: [],
+    posts: null,
     newPostModal: false,
     following: false
   };
@@ -39,11 +39,27 @@ export class UserPage extends Component {
   componentDidUpdate = async (prevProps, prevState) => {
     if (prevProps.match.params.userId !== this.props.match.params.userId) {
       this.setState({ loading: true });
-      const user = await getUserById(this.props.match.params.userId);
-      const posts = await getPostsByUser(this.props.match.params.userId);
-      this.setState({ user, posts, loading: false });
+      this.props.getUser(this.props.match.params.userId);
+      this.props.getPosts(this.props.match.params.userId);
     }
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user && nextProps.user !== this.props.user) {
+      this.setState({
+        loading: false,
+        user: nextProps.user,
+        following: this.checkIsFollow(nextProps.user)
+      });
+    }
+    if (nextProps.posts && nextProps.posts !== this.props.posts) {
+      this.setState({
+        loading: false,
+        posts: nextProps.posts,
+        following: nextProps.user ? this.checkIsFollow(nextProps.user) : false
+      });
+    }
+  }
 
   submitDelete = (password, user) => async event => {
     event.preventDefault();
@@ -108,15 +124,8 @@ export class UserPage extends Component {
   };
 
   componentDidMount = async () => {
-    this.setState({ loading: true });
-    const user = await getUserById(this.props.match.params.userId);
-    const posts = await getPostsByUser(this.props.match.params.userId);
-    this.setState({
-      user,
-      loading: false,
-      following: this.checkIsFollow(user),
-      posts
-    });
+    this.props.getUser(this.props.match.params.userId);
+    this.props.getPosts(this.props.match.params.userId);
   };
 
   handleFollowClick = async () => {
@@ -161,7 +170,7 @@ export class UserPage extends Component {
       newPostModal
     } = this.state;
     const { currentUser } = this.props;
-    if (!user) {
+    if (!user || !posts) {
       return <Spinner />;
     }
     const renderControllMenu = (
@@ -244,10 +253,14 @@ export class UserPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentUser: state.auth.currentUser
+  currentUser: state.auth.currentUser,
+  user: state.users.selectedUser,
+  posts: state.posts.posts
 });
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(logout())
+  logout: () => dispatch(logout()),
+  getUser: id => dispatch(getUserById(id)),
+  getPosts: id => dispatch(getPostsByUserId(id))
 });
 export default connect(
   mapStateToProps,

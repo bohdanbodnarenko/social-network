@@ -3,8 +3,9 @@ import { styles } from "./styles";
 import { withStyles, Switch } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import PostsList from "../../components/PostsList/PostsList";
-import { getAllPosts, getFollowingPosts } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
+import { connect } from "react-redux";
+import { getAllPosts, getPostsFollowing } from "../../store/posts/actions";
 
 export class Feed extends Component {
   state = {
@@ -21,18 +22,17 @@ export class Feed extends Component {
     if (!this.state.onlyFollowing === prevState.onlyFollowing) {
       this.getPosts();
     }
+    if (prevProps.posts !== this.props.posts) {
+      this.setState({ loading: false });
+    }
   };
 
   getPosts = async () => {
     this.setState({ loading: true });
     if (this.state.onlyFollowing) {
-      const { data } = await getFollowingPosts();
-      console.log(data);
-      this.setState({ loading: false, posts: data.posts });
+      this.props.getFollowing();
     } else {
-      const { data } = await getAllPosts();
-      console.log(data);
-      this.setState({ loading: false, posts: data.posts });
+      this.props.getAllPosts();
     }
   };
 
@@ -41,8 +41,8 @@ export class Feed extends Component {
   };
 
   render() {
-    const { posts, loading } = this.state;
-    const { classes } = this.props;
+    const { loading } = this.state;
+    const { classes, posts } = this.props;
     return (
       <div className={classes.root}>
         <div className={classes.switchWrapper}>
@@ -74,4 +74,18 @@ export class Feed extends Component {
   }
 }
 
-export default withStyles(styles)(Feed);
+const mapStateToProps = ({ posts }) => ({
+  posts: posts.posts
+});
+
+const mapDispatchToProps = dispatch => ({
+  getAllPosts: () => dispatch(getAllPosts()),
+  getFollowing: () => dispatch(getPostsFollowing())
+});
+
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Feed)
+);

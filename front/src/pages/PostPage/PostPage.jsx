@@ -1,26 +1,28 @@
-import React, { Component } from "react";
+import React from "react";
 import SinglePost from "../../components/SinglePost/SinglePost";
 import Spinner from "../../UI/Spinner/Spinner";
-import { getPost } from "../../utils/requests";
+import { connect } from "react-redux";
+import { getPostById } from "../../store/posts/actions";
 
-export class PostPage extends Component {
-  state = {
-    post: this.props.post,
-    currentPostId: this.props.match.params.postId
-  };
+const PostPage = props => {
+  props.getPost(props.match.params.postId);
 
-  componentDidMount = async () => {
-    const { data } = await getPost(this.state.currentPostId);
-    this.setState({ post: data.post });
-  };
-
-  render() {
-    const { post } = this.state;
-    if (!post) {
-      return <Spinner />;
-    }
-    return <SinglePost withComments post={post} />;
+  const { post } = props;
+  if (!post) {
+    return <Spinner />;
   }
-}
+  return <SinglePost withComments post={post} />;
+};
 
-export default PostPage;
+const mapStateToProps = ({ posts }) => ({
+  post: posts.selectedPost
+});
+
+const mapDispatchToProps = dispatch => ({
+  getPost: id => dispatch(getPostById(id))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PostPage);
