@@ -1,277 +1,326 @@
 .header {
-  height: 90vh;
-  background-image: linear-gradient(
-      to right bottom,
-      rgba(124, 75, 196, 0.75),
-      rgba(85, 69, 204, 0.75)
-    ),
-    url("http://localhost:8080/user/photo/5ca5d8569ca7f84a90dbf443");
-  background-size: cover;
-  background-position: top;
-  margin: 25px;
-  clip-path: polygon(0 0, 100% 0, 100% 70vh, 0 100%);
+    height: 90vh;
+    background-image: linear-gradient(to right bottom,
+        rgba(124, 75, 196, 0.75),
+        rgba(85, 69, 204, 0.75)),
+        url("http://localhost:8080/user/photo/5ca5d8569ca7f84a90dbf443");
+    background-size: cover;
+    background-position: top;
+    margin: 25px;
+    clip-path: polygon(0 0, 100% 0, 100% 70vh, 0 100%);
 }
 
 .heading-primary {
-  text-align: center;
-  color: #fff;
-  text-transform: uppercase;
-  backface-visibility: hidden;
-  margin-bottom: 60px;
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    backface-visibility: hidden;
+    margin-bottom: 60px;
 }
 
 .heading-primary-main {
-  display: block;
-  font-size: 60px;
-  font-weight: 400;
-  letter-spacing: 30px;
-  animation-name: moveInLeft;
-  animation-duration: 0.9s;
-  animation-timing-function: ease-out;
+    display: block;
+    font-size: 60px;
+    font-weight: 400;
+    letter-spacing: 65px;
+    animation-name: moveInLeft;
+    animation-duration: 0.9s;
+    animation-timing-function: ease-out;
 }
 
 .heading-primary-sub {
-  display: block;
-  font-size: 20px;
-  font-weight: 400;
-  letter-spacing: 25.4px;
-  animation-name: moveInRight;
-  animation-duration: 0.9s;
-  animation-timing-function: ease-out;
+    display: block;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 25.4px;
+    animation-name: moveInRight;
+    animation-duration: 0.9s;
+    animation-timing-function: ease-out;
 }
 
 .text-box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -47%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -47%);
 }
 
 @keyframes moveInLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-100px);
-  }
+    0% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
 
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+        transform: scale(.5)
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @keyframes moveInRight {
-  0% {
-    opacity: 0;
-    transform: translateX(100px);
-  }
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
 
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .btn {
-  text-transform: uppercase;
-  padding: 15px 40px;
-  display: inline-block;
-  text-align: center;
-  border-radius: 100px;
-  outline: none;
-  transition: all 0.2s;
-  position: relative;
+    text-transform: uppercase;
+    padding: 15px 40px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 100px;
+    outline: none;
+    transition: all 0.2s;
+    position: relative;
+    border: none;
 }
 
 .btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(19, 19, 19, 0.2);
+    transform: translateY(-3px);
+    transform: translateX(-52%);
+    box-shadow: 0 10px 20px rgba(19, 19, 19, 0.2);
 }
 
 .btn:active {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 10px rgba(19, 19, 19, 0.2);
+    transform: translateY(-1px);
+    transform: translateX(-52%);
+    box-shadow: 0 5px 10px rgba(19, 19, 19, 0.2);
 }
 
 .btn-white {
-  position: absolute;
-  background-color: #fff;
-  color: #777;
-  left: 33.4%;
-  /* transform: translateX(-50%); */
+    position: absolute;
+    background-color: #fff;
+    color: #777;
+    left: 50%;
+    transform: translateX(-52%);
+    cursor: pointer;
 }
 
 .btn::after {
-  content: "";
-  display: inline-block;
-  height: 100%;
-  width: 100%;
-  border-radius: 100px;
-  background: #000;
-  position: absolute;
-  top: 0%;
-  left: 0;
-  z-index: -1;
-  transition: all 0.4s;
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    background: #000;
+    position: absolute;
+    top: 0%;
+    left: 0;
+    z-index: -1;
+    transition: all 0.4s;
+    cursor: pointer;
 }
 
 .btn-white::after {
-  background-color: #fff;
+    background-color: #fff;
 }
 
 .btn:hover::after {
-  transform: scale(1.2);
-  opacity: 0;
+    transform: scale(1.2);
+    opacity: 0;
 }
 
 .section-about {
-  padding: 25rem 0;
-  margin-top: -20vh;
+    padding: 25rem 0;
+    margin-top: -20vh;
 }
 
 .heading-secondary {
-  font-size: 3.5rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  background-image: linear-gradient(
-    to right bottom,
-    rgba(124, 75, 196, 0.75),
-    rgba(85, 69, 204, 0.75)
-  );
-  display: inline-block;
-  background-clip: text;
-  color: transparent;
-  transition: all 0.2s;
+    font-size: 3.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    background-image: linear-gradient(to right bottom,
+        rgba(124, 75, 196, 0.75),
+        rgba(85, 69, 204, 0.75));
+    display: inline-block;
+    background-clip: text;
+    color: transparent;
+    transition: all 0.2s;
+
 }
 
 .heading-secondary:hover {
-  transform: skewY(1.5deg);
+    transform: skewY(1.5deg);
 }
 
 .center-text {
-  text-align: center;
+    text-align: center;
 }
+
 .margin-bottom {
-  margin-bottom: 8rem;
+    margin-bottom: 8rem;
 }
 
 .row {
-  display: flex;
-  position: relative;
-  max-width: 100vw;
-  box-sizing: border-box;
-  justify-content: space-evenly;
-  padding: 0 20px;
+    display: flex;
+    position: relative;
+    max-width: 100vw;
+    box-sizing: border-box;
+    justify-content: space-evenly;
+    padding: 0 20px;
 }
 
 .heading-tertiary {
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
 }
 
 .paragraph {
-  font-size: 1.35rem;
+    font-size: 1.25rem;
 }
 
 .paragraph:not(:last-child) {
-  margin-bottom: 3rem;
+    margin-bottom: 3rem;
 }
 
 .composition {
-  position: relative;
-  padding-left: 50px;
+    position: relative;
+    padding-left: 50px;
 }
 
 .composition_photo {
-  width: 88%;
-  box-shadow: 0 1.5rem 4rem rgba(124, 75, 196, 0.185);
-  border-radius: 2px;
-  transition: all 0.2s;
-  outline-offset: 1.4rem;
+    width: 88%;
+    box-shadow: 0 1.5rem 4rem rgba(124, 75, 196, 0.185);
+    border-radius: 2px;
+    transition: all 0.2s;
+    outline-offset: 1.4rem;
+    animation-name: fade;
+    animation-duration: 0.9s;
+    animation-timing-function: ease-out;
 }
 
 .composition_photo:hover {
-  transform: scale(1.05);
-  box-shadow: 0 1.6rem 4rem rgba(124, 75, 196, 0.185);
-  outline: 1.5rem solid #5545cc;
+    transform: scale(1.05);
+    box-shadow: 0 1.6rem 4rem rgba(124, 75, 196, 0.185);
+    outline: 1.5rem solid #5545cc;
 }
 
 .features {
-  padding: 20rem 0;
-  background-image: linear-gradient(
-      to right bottom,
-      rgba(124, 75, 196, 0.75),
-      rgba(85, 69, 204, 0.75)
-    ),
-    url("https://hdqwalls.com/download/switzerland-landscape-4k-hd-1920x1080.jpg");
-  background-size: cover;
-  transform: skewY(-7deg);
-  margin-top: -10rem;
+    padding: 20rem 0;
+    background-image: linear-gradient(to right bottom,
+        rgba(124, 75, 196, 0.75),
+        rgba(85, 69, 204, 0.75)),
+        url("https://hdqwalls.com/download/switzerland-landscape-4k-hd-1920x1080.jpg");
+    background-size: cover;
+    transform: skewY(-7deg);
+    margin-top: -10rem;
+    box-shadow: 0 1.6rem 4rem rgba(124, 75, 196, 0.185);
 }
 
-.features > * {
-  transform: skewY(7deg);
+.features>* {
+    transform: skewY(7deg);
 }
 
 .feature-box {
-  background-color: rgba(255, 255, 255, 0.65);
-  font-size: 1.5rem;
-  padding: 2.5rem;
-  text-align: center;
-  border-radius: 3px;
-  box-shadow: 0 1.5rem 4rem rgba(19, 19, 19, 0.5);
-  margin: 0 15px;
-  color: #464646;
-  transition: all 0.3s;
+    background-color: rgba(255, 255, 255, 0.65);
+    font-size: 1.5rem;
+    padding: 2.5rem;
+    text-align: center;
+    border-radius: 3px;
+    box-shadow: 0 1.5rem 4rem rgba(19, 19, 19, 0.5);
+    margin: 0 15px;
+    color: #464646;
+    transition: all 0.3s;
+    animation-name: moveInLeft;
+    animation-duration: 0.9s;
+    animation-timing-function: ease-out;
+    background-position: center;
 }
 
 .feature-box:hover {
-  transform: translateY(-1.5rem) scale(1.03);
+    transform: translateY(-1.5rem) scale(1.03);
 }
 
 .feature_icon {
-  background-image: linear-gradient(
-    to right bottom,
-    rgba(124, 75, 196, 0.75),
-    rgba(85, 69, 204, 0.75)
-  );
-  background-clip: text;
-  color: transparent;
-  display: inline-block;
+    background-image: linear-gradient(to right bottom,
+        rgba(124, 75, 196, 0.75),
+        rgba(85, 69, 204, 0.75));
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
 }
 
 .registration-section {
-  padding: 25rem 0;
-  margin-top: -10rem;
-  text-align: center;
-  background-image: linear-gradient(
-    to right bottom,
-    rgba(44, 44, 44, 0.75),
-    rgba(0, 0, 0, 0.75)
-  );
+    padding: 25rem 0;
+    margin-top: -10rem;
+    text-align: center;
+    background-image: linear-gradient(to right bottom,
+        rgba(44, 44, 44, 0.75),
+        rgba(0, 0, 0, 0.75));
 }
 
 .register {
-  background-image: linear-gradient(
-      105deg,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(255, 255, 255, 0.9) 50%,
-      transparent 50%
-    ),
-    url("https://i.imgur.com/Z3L0WZ8.jpg");
-  background-size: cover;
-  background-position: top;
-  background-repeat: no-repeat;
-  box-shadow: 0 1.5rem 4rem rgba(19, 19, 19, 0.2);
-  height: 35rem;
-  width: 80%;
+    margin-top: 20px;
+    background-image: linear-gradient(100deg,
+        rgba(46, 46, 46, 0.95) 0%,
+        rgba(46, 46, 46, 0.95) 57%,
+        transparent 57%),
+        url("https://images.unsplash.com/photo-1482686115713-0fbcaced6e28?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1347&q=80");
+    background-size: cover;
+    box-shadow: 0 1.5rem 4rem rgba(124, 75, 196, 0.185);
+    background-repeat: no-repeat;
+    box-shadow: 0 1.5rem 4rem rgba(19, 19, 19, 0.2);
+    height: 35rem;
+    width: 80%;
 }
 
-@media (max-width: 950px) {
-  .row {
+.register-form {
+    display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+    width: 50%;
+    height: 100%;
+    justify-content: space-evenly;
+    margin-left: 20px;
+}
+
+
+@media (max-width: 950px) {
+    .row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .heading-primary-main {
+        letter-spacing: 40px;
+    }
+
+    .feature-box {
+        margin-bottom: 35px
+    }
+}
+
+@media (max-width: 600px) {
+    .heading-primary-main {
+        font-size: 2.1rem;
+        font-weight: 400;
+        letter-spacing: 20px;
+        margin-bottom: 12px
+    }
+
+    .heading-primary-sub {
+        font-size: 1rem;
+        font-weight: 400;
+        letter-spacing: 15.4px;
+    }
 }
