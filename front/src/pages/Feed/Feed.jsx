@@ -6,7 +6,7 @@ import PostsList from "../../components/PostsList/PostsList";
 import Spinner from "../../UI/Spinner/Spinner";
 import { connect } from "react-redux";
 import { getAllPosts, getPostsFollowing } from "../../store/posts/actions";
-
+import Fade from "react-reveal/Fade";
 export class Feed extends Component {
   state = {
     onlyFollowing: true,
@@ -66,7 +66,13 @@ export class Feed extends Component {
           />
         </div>
         <div className={classes.postsWrapper}>
-          {loading ? <Spinner small /> : <PostsList posts={posts} />}
+          {loading ? (
+            <Spinner small />
+          ) : (
+            <Fade>
+              <PostsList posts={posts} />
+            </Fade>
+          )}
           {/* <PostsList posts={posts} /> */}
         </div>
       </div>

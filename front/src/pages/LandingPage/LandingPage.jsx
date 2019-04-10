@@ -91,10 +91,12 @@ class LandingPage extends Component {
         <main>
           <section className="section-about">
             <div className="center-text margin-bottom">
-              <h2 className="heading-secondary">New modern Social Network</h2>
+              <Fade top>
+                <h2 className="heading-secondary">New modern Social Network</h2>
+              </Fade>
             </div>
             <div className="row">
-              <Fade duration={500} left cascade>
+              <Fade duration={500} left delay={100} cascade>
                 <div>
                   <h3 className="heading-tertiary">
                     Be able to share information

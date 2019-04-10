@@ -4,6 +4,8 @@ import Spinner from "../../UI/Spinner/Spinner";
 import SingleUser from "../../components/SingleUser/SingleUser";
 import { connect } from "react-redux";
 import { getAllUsers } from "../../store/users/actions";
+import Fade from "react-reveal/Fade";
+
 export class Users extends Component {
   state = {
     users: null
@@ -19,11 +21,13 @@ export class Users extends Component {
     }
     return (
       <div>
-        <Styles.UsersWrapper>
-          {users.map(user => (
-            <SingleUser user={user} key={user._id} />
-          ))}
-        </Styles.UsersWrapper>
+        <Fade>
+          <Styles.UsersWrapper>
+            {users.map(user => (
+              <SingleUser user={user} key={user._id} />
+            ))}
+          </Styles.UsersWrapper>
+        </Fade>
       </div>
     );
   }
