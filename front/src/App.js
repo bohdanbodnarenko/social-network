@@ -8,7 +8,7 @@ import store from "./store/store";
 import TopShape from "./UI/Shapes/TopShape";
 import BottomShape from "./UI/Shapes/BottomShape";
 import { theme } from "./theme";
-
+import socket from './utils/sockets'
 export const history = createBrowserHistory();
 class App extends Component {
   componentDidUpdate(prevProps, prevState) {
@@ -16,6 +16,7 @@ class App extends Component {
   }
 
   render() {
+    socket.on("connected", data => console.log(data));
     setupInterceptors(store, history);
     return (
       <Fragment>

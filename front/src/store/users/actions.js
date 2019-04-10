@@ -9,10 +9,7 @@ export const getAllUsers = () => async dispatch => {
         data
     } = await httpService.get('users');
     if (data) {
-        dispatch({
-            type: SET_USERS,
-            payload: data.users
-        })
+        dispatch(setUsers(data.users))
     }
 }
 
@@ -22,10 +19,17 @@ export const getUserById = (id) => async dispatch => {
             data
         } = await httpService.get(`user/${id}`);
         if (data) {
-            dispatch({
-                type: SET_SELECTED_USER,
-                payload: data
-            })
+            dispatch(setSelectedUser(data))
         }
     }
 }
+
+export const setUsers = users => ({
+    type: SET_USERS,
+    payload: users
+})
+
+export const setSelectedUser = user => ({
+    type: SET_SELECTED_USER,
+    payload: user
+})

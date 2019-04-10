@@ -19,7 +19,11 @@ const SingleComment = ({ comment }) => {
       <ListItemAvatar>
         <Avatar
           alt={comment.postedBy.name}
-          src={getLinkToUserAvatar(comment.postedBy._id)}
+          src={
+            comment.postedBy.photo
+              ? getLinkToUserAvatar(comment.postedBy._id)
+              : "https://www.gravatar.com/avatar?d=mp&s=200"
+          }
         />
       </ListItemAvatar>
       <ListItemText

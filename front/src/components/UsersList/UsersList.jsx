@@ -9,6 +9,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { getLinkToUserAvatar } from "../../utils/requests";
 import * as Router from "react-router-dom";
 import { Link } from "@material-ui/core";
+import Fade from "react-reveal/Fade";
 
 const styles = theme => ({
   root: {
@@ -29,19 +30,21 @@ const UsersList = props => {
           to={`/user/${user._id}`}
           key={user._id + i}
         >
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar
-                alt={user.name}
-                src={
-                  user.photo
-                    ? getLinkToUserAvatar(user._id)
-                    : "https://www.gravatar.com/avatar?d=mp&s=200"
-                }
-              />
-            </ListItemAvatar>
-            <ListItemText primary={user.name} />
-          </ListItem>
+          <Fade duration={500} cascade>
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar
+                  alt={user.name}
+                  src={
+                    user.photo
+                      ? getLinkToUserAvatar(user._id)
+                      : "https://www.gravatar.com/avatar?d=mp&s=200"
+                  }
+                />
+              </ListItemAvatar>
+              <ListItemText primary={user.name} />
+            </ListItem>
+          </Fade>
         </Link>
       ))}
     </List>

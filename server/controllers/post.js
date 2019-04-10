@@ -14,6 +14,11 @@ exports.getPosts = (req, res) => {
     })
     .populate("postedBy", "_id name ")
     .then(posts => {
+      posts.map(post => {
+        if (post.photo) {
+          post.photo.data = undefined
+        }
+      })
       res.json({
         posts
       });
@@ -64,14 +69,19 @@ exports.postsByUser = (req, res) => {
           error
         });
       }
+      posts.map(post => {
+        if (post.photo) {
+          post.photo.data = undefined
+        }
+      })
       res.json(posts);
     });
 };
 
 exports.postById = (req, res, next, id) => {
   Post.findById(id)
-    .populate("postedBy", "id name photo")
-    .populate("comments.postedBy", "_id name photo")
+    .populate("postedBy", "id name photo.contentType")
+    .populate("comments.postedBy", "_id name photo.contentType")
     .exec((error, post) => {
       if (error || !post) {
         return res.status(400).json({
@@ -98,6 +108,9 @@ exports.updatePost = (req, res, next) => {
         error
       });
     }
+    if (post.photo) {
+      post.photo.data = undefined
+    }
     res.json(post);
   });
 };
@@ -122,7 +135,9 @@ exports.getPostById = (req, res) => {
       error: "Post not found!"
     });
   }
-  req.app.io.emit('hello', 'data from post')
+  if (post.photo) {
+    post.photo.data = undefined
+  }
   res.json({
     post
   });
@@ -144,44 +159,50 @@ exports.deletePost = (req, res, next) => {
 
 exports.like = (req, res) => {
   Post.findOneAndUpdate({
-    _id: req.body.postId
-  }, {
-    $addToSet: {
-      likes: req.body.userId
-    }
-  }, {
-    new: true
-  }).exec((error, result) => {
-    if (error) {
-      return res.status(400).json({
-        error
-      });
-    }
-    res.json({
-      result
-    });
-  });
-};
-
-exports.unlike = (req, res) => {
-  Post.findByIdAndUpdate(
-    req.body.postId, {
-      $pull: {
+      _id: req.body.postId
+    }, {
+      $addToSet: {
         likes: req.body.userId
       }
     }, {
       new: true
-    }
-  ).exec((error, result) => {
-    if (error) {
-      return res.status(400).json({
-        error
+    })
+    .populate("postedBy", "id name photo.contentType")
+    .populate("comments.postedBy", "_id name photo.contentType").exec((error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error
+        });
+      }
+      req.app.io.emit('post_updated', result)
+      res.json({
+        result
       });
-    }
-    res.json({
-      result
     });
-  });
+};
+
+exports.unlike = (req, res) => {
+  Post.findByIdAndUpdate(
+      req.body.postId, {
+        $pull: {
+          likes: req.body.userId
+        }
+      }, {
+        new: true
+      }
+    )
+    .populate("postedBy", "id name photo.contentType")
+    .populate("comments.postedBy", "_id name photo.contentType").exec((error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error
+        });
+      }
+      req.app.io.emit('post_updated', result)
+      res.json({
+        result
+      });
+    });
 };
 
 exports.comment = (req, res) => {
@@ -207,6 +228,7 @@ exports.comment = (req, res) => {
           error
         });
       }
+      req.app.io.emit('post_updated', result)
       res.json({
         result
       });
@@ -237,6 +259,7 @@ exports.uncomment = (req, res) => {
           error
         });
       }
+      req.app.io.emit('post_updated', result)
       res.json({
         result
       });

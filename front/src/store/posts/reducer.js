@@ -1,6 +1,6 @@
 import {
   SET_POSTS,
-  SET_SELECTED_POST
+  SET_SELECTED_POST,
 } from "./types";
 
 const initState = {

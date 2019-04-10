@@ -46,12 +46,9 @@ const authRoutes = require("./routes/auth");
 app.use("/", postRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
-exports.client = null;
 io.on('connection', client => {
-  console.log('a user is connected')
   if (client) {
-    client = client
-    client.emit('hello', 'data')
+    client.emit('connected', 'Web sockets connected')
   }
 })
 

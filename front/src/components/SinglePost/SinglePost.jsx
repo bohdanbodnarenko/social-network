@@ -40,6 +40,7 @@ import {
 import Spinner from "../../UI/Spinner/Spinner";
 import red from "@material-ui/core/colors/red";
 import CommentsList from "../CommentsList/CommentsList";
+import Fade from "react-reveal/Fade";
 
 const styles = theme => ({
   root: {
@@ -193,76 +194,78 @@ class SinglePost extends Component {
             </DialogActions>
           </form>
         </Dialog>
-        <Card className={classes.card}>
-          <CardHeader
-            className={classes.header}
-            avatar={
-              post.postedBy && (
-                <Avatar
-                  src={
-                    post.postedBy.photo
-                      ? getLinkToUserAvatar(post.postedBy._id)
-                      : "https://www.gravatar.com/avatar?d=mp&s=200"
-                  }
-                />
-              )
-            }
-            title={
-              <Link to={`/user/${post.postedBy._id}`}>
-                {post.postedBy.name}
-              </Link>
-            }
-            subheader={moment(post.created).fromNow()}
-          />
+        <Fade>
+          <Card className={classes.card}>
+            <CardHeader
+              className={classes.header}
+              avatar={
+                post.postedBy && (
+                  <Avatar
+                    src={
+                      post.postedBy.photo
+                        ? getLinkToUserAvatar(post.postedBy._id)
+                        : "https://www.gravatar.com/avatar?d=mp&s=200"
+                    }
+                  />
+                )
+              }
+              title={
+                <Link to={`/user/${post.postedBy._id}`}>
+                  {post.postedBy.name}
+                </Link>
+              }
+              subheader={moment(post.created).fromNow()}
+            />
 
-          <Link to={`/post/${post._id}`}>
-            {post.photo && (
-              <CardMedia
-                className={classes.media}
-                image={getLinkToPostImage(post._id)}
-                title="Paella dish"
-              />
-            )}
-            <CardContent>
-              <Typography component="h6">{post.title}</Typography>
-              <Typography component="p">{post.body}</Typography>
-            </CardContent>
-          </Link>
-          <CardActions className={classes.actions} disableActionSpacing>
-            <IconButton
-              color="secondary"
-              onClick={this.handleLikeClick(post._id, currentUser._id)}
-              aria-label="Like"
-            >
-              {this.checkIsLiked() ? (
-                <Favorite color="secondary" />
-              ) : (
-                <FavoriteBorderOutlined />
+            <Link to={`/post/${post._id}`}>
+              {post.photo && (
+                <CardMedia
+                  className={classes.media}
+                  image={getLinkToPostImage(post._id)}
+                  title="Paella dish"
+                />
               )}
-            </IconButton>
-            {post.likes.length}
-            <IconButton
-              onClick={this.toggleModal("newCommentModal")}
-              aria-label="Comment"
-            >
-              <Comment />
-            </IconButton>
-            {post.commentsCount}
-            <IconButton aria-label="Share">
-              <ShareIcon />
-            </IconButton>
-            {post.postedBy._id === currentUser._id && (
-              <IconButton onClick={this.toggleModal("deleteModal")}>
-                <Delete />
+              <CardContent>
+                <Typography component="h6">{post.title}</Typography>
+                <Typography component="p">{post.body}</Typography>
+              </CardContent>
+            </Link>
+            <CardActions className={classes.actions} disableActionSpacing>
+              <IconButton
+                color="secondary"
+                onClick={this.handleLikeClick(post._id, currentUser._id)}
+                aria-label="Like"
+              >
+                {this.checkIsLiked() ? (
+                  <Favorite color="secondary" />
+                ) : (
+                  <FavoriteBorderOutlined />
+                )}
               </IconButton>
+              {post.likes.length}
+              <IconButton
+                onClick={this.toggleModal("newCommentModal")}
+                aria-label="Comment"
+              >
+                <Comment />
+              </IconButton>
+              {post.commentsCount}
+              <IconButton aria-label="Share">
+                <ShareIcon />
+              </IconButton>
+              {post.postedBy._id === currentUser._id && (
+                <IconButton onClick={this.toggleModal("deleteModal")}>
+                  <Delete />
+                </IconButton>
+              )}
+            </CardActions>
+            {withComments && (
+              <Paper style={{ width: "90vw", margin: "auto" }}>
+                <CommentsList comments={post.comments} />
+              </Paper>
             )}
-          </CardActions>
-          {withComments && (
-            <Paper style={{ width: "90vw", margin: "auto" }}>
-              <CommentsList comments={post.comments} />
-            </Paper>
-          )}
-        </Card>
+          </Card>
+        </Fade>
       </div>
     );
   }
