@@ -3,25 +3,31 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import SingleComment from "../SingleComment/SingleComment";
+import SingleChannel from "../SingleChannel/SingleChannel";
 
 const styles = theme => ({
   root: {
-    width: "100%",
+    width: "93%",
+    margin: "30px auto",
     backgroundColor: theme.palette.background.paper
   }
 });
 
-const CommentsList = ({ comments, classes }) => (
+const Channels = ({ channels, classes, currentUser }) => (
   <List className={classes.root}>
-    {comments.map(comment => (
-      <SingleComment key={comment._id} comment={comment} />
+    {channels.map(channel => (
+      <SingleChannel
+        currentUser={currentUser}
+        key={channel._id}
+        channel={channel}
+      />
     ))}
   </List>
 );
 
-CommentsList.propTypes = {
+Channels.propTypes = {
   classes: PropTypes.object.isRequired,
-  comments: PropTypes.array.isRequired
+  channels: PropTypes.array.isRequired
 };
 
-export default withStyles(styles)(CommentsList);
+export default withStyles(styles)(Channels);

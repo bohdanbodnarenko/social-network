@@ -7,8 +7,11 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Link } from "react-router-dom";
-import { getLinkToUserAvatar } from "../../utils/requests";
+import { Link, withRouter } from "react-router-dom";
+import {
+  getLinkToUserAvatar,
+  getLinkToPrivateChannel
+} from "../../utils/requests";
 
 const styles = {
   card: {
@@ -20,8 +23,11 @@ const styles = {
   }
 };
 
-const SingleUser = props => {
-  const { classes, user } = props;
+const SingleUser = ({ classes, user, history }) => {
+  const handleMessageClick = async () => {
+    const id = await getLinkToPrivateChannel(user._id);
+    history.push(`/messages/${id}`);
+  };
   return (
     <Card className={classes.card}>
       <Link to={`/user/${user._id}`}>
@@ -44,19 +50,15 @@ const SingleUser = props => {
         </CardActionArea>
       </Link>
       <CardActions>
-        <Link to={`/messages/${user._id}`}>
-          <Button size="small" >
-            Message
-          </Button>
-        </Link>
+        <Button onClick={handleMessageClick} size="small">
+          Message
+        </Button>
         <Link to={`/user/${user._id}`}>
-          <Button size="small" >
-            Profile
-          </Button>
+          <Button size="small">Profile</Button>
         </Link>
       </CardActions>
     </Card>
   );
 };
 
-export default withStyles(styles)(SingleUser);
+export default withRouter(withStyles(styles)(SingleUser));

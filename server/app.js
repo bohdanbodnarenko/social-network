@@ -5,6 +5,7 @@ const express = require("express"),
   expressValidator = require("express-validator"),
   cookieParser = require("cookie-parser"),
   userRoutes = require("./routes/user"),
+  channelRoutes = require("./routes/channel"),
   fs = require("fs"),
   cors = require("cors"),
   http = require('http').Server(app),
@@ -46,6 +47,7 @@ const authRoutes = require("./routes/auth");
 app.use("/", postRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
+app.use("/", channelRoutes);
 io.on('connection', client => {
   if (client) {
     client.emit('connected', 'Web sockets connected')

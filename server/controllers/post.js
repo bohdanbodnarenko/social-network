@@ -50,6 +50,9 @@ exports.createPost = async (req, res, next) => {
           error
         });
       }
+      if (result.photo) {
+        result.photo.data = undefined
+      }
       res.json(result);
     });
   });
@@ -236,7 +239,7 @@ exports.comment = (req, res) => {
 };
 
 exports.uncomment = (req, res) => {
-  let comment = req.body.comment;
+  const comment = req.body.comment;
   Post.findOneAndUpdate({
       _id: req.body.postId
     }, {

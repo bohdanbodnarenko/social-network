@@ -1,10 +1,40 @@
 import React, { Component } from "react";
-// import * as Styles from "./styles";
+import { connect } from "react-redux";
+import { getChannels } from "../../store/channels/actions";
+import ChannelsList from "../../components/ChannelsList/ChannelsList";
 
 export class Messages extends Component {
+  state = {
+    channels: null
+  };
+
+  componentDidMount() {
+    this.props.getChannels();
+  }
+
   render() {
-    return <div>Comming soon...</div>;
+    const { channels, currentUser } = this.props;
+    console.log(channels, currentUser);
+    return (
+      <div>
+        {channels && channels.length > 0 && (
+          <ChannelsList currentUser={currentUser} channels={channels} />
+        )}
+      </div>
+    );
   }
 }
 
-export default Messages;
+const mapStateToProps = ({ auth, channels }) => ({
+  channels: channels.channels,
+  currentUser: auth.currentUser
+});
+
+const mapDispatchToProps = dispatch => ({
+  getChannels: () => dispatch(getChannels())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Messages);

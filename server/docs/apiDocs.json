@@ -18,5 +18,13 @@
   "[PUT] /post/like": "like post",
   "[PUT] /post/unlike": "inlike post",
   "[DELETE] /posts/:postId": "delete post",
-  "[GET] /post/photo/:userId": "get post photo"
+  "[GET] /post/photo/:userId": "get post photo",
+  "[PUT] /post/comment": "add comment",
+  "[PUT] /post/uncomment": "delete comment",
+  "[GET] /posts/following": "get followers posts",
+  "[POST] /channels/private": "create new private channel (1 by 1)",
+  "[GET] /channels/channelId": "get channel by id",
+  "[PUT] /channels/message": "add message to channel",
+  "[PUT] /channels/unmessage": "delete message from channel",
+  "[PUT] /channels": "all messages of current user"
 }

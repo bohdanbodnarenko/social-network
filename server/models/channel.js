@@ -4,13 +4,21 @@ const {
 } = mongoose.Schema;
 
 const channelSchema = new mongoose.Schema({
+    isPrivate: {
+        type: Boolean,
+        default: false
+    },
     participants: [{
-        type: Objectid,
+        type: ObjectId,
         ref: 'User'
     }],
+    name: {
+        type: String,
+        default: ''
+    },
     messages: [{
         sender: {
-            type: Objectid,
+            type: ObjectId,
             ref: 'User'
         },
         content: {
@@ -25,8 +33,12 @@ const channelSchema = new mongoose.Schema({
             type: Date,
             default: Date.now
         }
-    }]
+    }],
+    messagesCount: {
+        type: Number,
+        default: 0
+    }
 
 })
 
-module.exports = mongoose.model("Channel", postSchema);
+module.exports = mongoose.model("Channel", channelSchema);

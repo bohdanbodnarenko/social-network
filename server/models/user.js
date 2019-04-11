@@ -42,7 +42,14 @@ const userSchema = new mongoose.Schema({
     followers: [{
         type: ObjectId,
         ref: "User"
-    }]
+    }],
+    is_active: {
+        type: Boolean,
+        default: false
+    },
+    lastActive: {
+        type: Date
+    }
 });
 
 //virtual field

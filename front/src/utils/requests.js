@@ -34,6 +34,16 @@ export const getLinkToPostImage = id => {
   return `http://localhost:8080/post/photo/${id}`;
 };
 
+export const getLinkToPrivateChannel = async userId => {
+  const res = await httpService.post('/channels/private', {
+    userId
+  })
+  console.log(res)
+  if (res) {
+    return res.data;
+  }
+}
+
 export const deletePost = async id => httpService.delete(`/posts/${id}`);
 
 export const followToUser = async (followId, userId) => {
