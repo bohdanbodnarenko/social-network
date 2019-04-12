@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import SingleComment from "../SingleComment/SingleComment";
 import SingleChannel from "../SingleChannel/SingleChannel";
 
 const styles = theme => ({

@@ -11,7 +11,10 @@ const styles = {
   root: {
     padding: "2px 4px",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    width: "100%",
+    position: "absolute",
+    bottom: 0
   },
   input: {
     marginLeft: 8,
@@ -35,7 +38,8 @@ const MessageForm = props => {
       <IconButton className={classes.iconButton} aria-label="Menu">
         <Icons.LinkRounded />
       </IconButton>
-      <InputBase className={classes.input} placeholder="Search Google Maps" />
+      <Divider className={classes.divider} />
+      <InputBase className={classes.input} placeholder="Type your message..." />
       <IconButton className={classes.iconButton} aria-label="Search">
         <Icons.TagFacesRounded />
       </IconButton>
