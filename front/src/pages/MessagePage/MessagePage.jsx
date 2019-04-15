@@ -3,26 +3,19 @@ import { getChannelById } from "../../store/channels/actions";
 import { connect } from "react-redux";
 import MessageForm from "./MessageForm/MessageForm";
 import MessageHeader from "./MessageHeader/MessageHeader";
-import { MessagesWrapper } from "./styles";
+import { MessagesWrapper, MessagesContainer } from "./styles";
 import Spinner from "../../UI/Spinner/Spinner";
+import SingleMessage from "./SingleMessage/SingleMessage";
+import { sendMessage } from "../../utils/requests";
 
 export class MessagePage extends Component {
   state = {
-    targetUser: null
+    targetUser: null,
+    messageText: ""
   };
   componentDidMount = () => {
     this.props.getChannel(this.props.match.params.channelId);
   };
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.props.channel && this.props.channel.isPrivate) {
-  //     this.setState({
-  //       targetUser: this.props.channel.participants.filter(
-  //         el => el._id !== this.props.currentUser._id
-  //       )[0]
-  //     });
-  //   }
-  // }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.channel && nextProps.channel.isPrivate) {
@@ -34,16 +27,36 @@ export class MessagePage extends Component {
     }
   }
 
+  handleChange = event => {
+    this.setState({ messageText: event.target.value });
+  };
+  sendMessage = () => {
+    sendMessage(this.props.channel._id, this.state.messageText);
+    this.setState({ messageText: "" });
+  };
+
   render() {
-    const { targetUser } = this.state;
-    const { channel } = this.props;
+    const { targetUser, messageText } = this.state;
+    const { channel, currentUser } = this.props;
     return (
       <MessagesWrapper>
         {channel ? (
           <Fragment>
             <MessageHeader user={targetUser} name={channel.name} />
-            Message!
-            <MessageForm />
+            <MessagesContainer>
+              {channel.messages.map(message => (
+                <SingleMessage
+                  key={message._id}
+                  message={message}
+                  currentUser={currentUser}
+                />
+              ))}
+            </MessagesContainer>
+            <MessageForm
+              messageText={messageText}
+              submit={this.sendMessage}
+              change={this.handleChange}
+            />
           </Fragment>
         ) : (
           <Spinner small />

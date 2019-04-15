@@ -44,6 +44,17 @@ export const getLinkToPrivateChannel = async userId => {
   }
 }
 
+export const sendMessage = async (channelId, content) => {
+  const res = await httpService.put('/channels/message', {
+    channelId,
+    content
+  })
+  console.log(res)
+  if (res) {
+    return res.data;
+  }
+}
+
 export const deletePost = async id => httpService.delete(`/posts/${id}`);
 
 export const followToUser = async (followId, userId) => {

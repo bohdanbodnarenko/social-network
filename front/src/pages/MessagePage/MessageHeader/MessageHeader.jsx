@@ -9,6 +9,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { styles } from "./styles";
 import { Avatar } from "@material-ui/core";
 import { getLinkToUserAvatar } from "../../../utils/requests";
+import { Link } from "react-router-dom";
 
 const MessageHeader = props => {
   const { classes, user, name } = props;
@@ -17,9 +18,11 @@ const MessageHeader = props => {
       <Toolbar>
         <Avatar
           src={
-            user.photo
-              ? getLinkToUserAvatar(user._id)
-              : "https://www.gravatar.com/avatar?d=mp&s=200"
+            user
+              ? user.photo
+                ? getLinkToUserAvatar(user._id)
+                : "https://www.gravatar.com/avatar?d=mp&s=200"
+              : "https://cdn3.iconfinder.com/data/icons/inficons-set-2/512/search-512.png"
           }
         />
         <Typography
@@ -28,7 +31,7 @@ const MessageHeader = props => {
           color="inherit"
           noWrap
         >
-          {name || user.name}
+          {name || (user && <Link to={`/user/${user._id}`}>{user.name}</Link>)}
         </Typography>
         <div className={classes.grow} />
         <div className={classes.search}>

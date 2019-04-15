@@ -73,6 +73,7 @@ exports.getChannelById = (req, res) => {
 exports.channelById = (req, res, next, id) => {
     Channel.findById(id)
         .populate("participants", "_id name photo.contentType")
+        .populate('messages.sender', 'name photo.contentType')
         .exec((error, channel) => {
             if (error || !channel) {
                 return res.status(400).json({

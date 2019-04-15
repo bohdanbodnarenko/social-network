@@ -9,7 +9,7 @@ import * as Icons from "@material-ui/icons";
 
 const styles = {
   root: {
-    padding: "2px 4px",
+    padding: "2px 0",
     display: "flex",
     alignItems: "center",
     width: "100%",
@@ -33,21 +33,34 @@ const styles = {
 const MessageForm = props => {
   const { classes } = props;
 
+  const handleKeyPress = event => {
+    if (event.key === "Enter") {
+      props.submit();
+    }
+  };
+
   return (
     <Paper className={classes.root} elevation={1}>
-      <IconButton className={classes.iconButton} aria-label="Menu">
+      <IconButton className={classes.iconButton} aria-label="File">
         <Icons.LinkRounded />
       </IconButton>
       <Divider className={classes.divider} />
-      <InputBase className={classes.input} placeholder="Type your message..." />
-      <IconButton className={classes.iconButton} aria-label="Search">
+      <InputBase
+        onKeyPress={handleKeyPress}
+        onChange={props.change}
+        name="message"
+        className={classes.input}
+        placeholder="Type your message..."
+        value={props.messageText}
+      />
+      <IconButton className={classes.iconButton} aria-label="Message">
         <Icons.TagFacesRounded />
       </IconButton>
       <Divider className={classes.divider} />
       <IconButton
+        onClick={props.submit}
         color="primary"
         className={classes.iconButton}
-        aria-label="Directions"
       >
         <Icons.SendRounded />
       </IconButton>
@@ -56,7 +69,10 @@ const MessageForm = props => {
 };
 
 MessageForm.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  submit: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  messageText: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(MessageForm);
