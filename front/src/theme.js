@@ -6,7 +6,7 @@ export const colors = {
     black: "#191919",
     lightGrey: "#898989",
     middleGrey: "#646464",
-    darkGrey: "#464646",
+    darkGrey: "#404040",
     lightPurple: "#7B4BC4",
     middlePurple: "#6B41AB",
     darkPurple: "#5B3791",

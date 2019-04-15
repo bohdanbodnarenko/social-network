@@ -38,7 +38,7 @@ export const styles = theme => ({
 });
 
 export const SideMenu = styled.div`
-  z-index: 200;
+  z-index: 999;
   border-radius: 50%;
   box-shadow: ${props =>
     props.open ? "0 0 0 225vh rgba(106, 86, 255,.9)" : ""};

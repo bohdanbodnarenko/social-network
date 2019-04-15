@@ -14,7 +14,7 @@ const Message = styled.div`
   border-radius: 30px;
   border-bottom-left-radius: ${props => (props.own ? 30 : 0)};
   border-bottom-right-radius: ${props => (props.own ? 0 : 30)};
-  max-width: 40%;
+  max-width: 300px;
   position: relative;
   margin: 12px;
   margin-right: ${props => (props.own ? "60px" : 0)};
@@ -23,6 +23,7 @@ const Message = styled.div`
 `;
 
 const ContentWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
 `;
@@ -38,28 +39,32 @@ const Time = styled.span`
 const SingleMessage = ({ currentUser, message }) => {
   const isOwn = currentUser._id === message.sender._id;
   return (
-    <div style={{ width: "100%", height: 600 }}>
+    <div style={{ width: "100%" }}>
       <Message own={isOwn}>
-        <Avatar
-          style={{
-            position: "absolute",
-            right: isOwn ? "-50px" : "auto",
-            left: !isOwn ? "-50px" : "auto",
-            bottom: 0
-          }}
-          src={
-            message.sender.photo
-              ? getLinkToUserAvatar(message.sender._id)
-              : "https://www.gravatar.com/avatar?d=mp&s=200"
-          }
-        />
+        <Link to={`/user/${message.sender._id}`}>
+          <Avatar
+            style={{
+              position: "absolute",
+              right: isOwn ? "-50px" : "auto",
+              left: !isOwn ? "-50px" : "auto",
+              bottom: 0
+            }}
+            src={
+              message.sender.photo
+                ? getLinkToUserAvatar(message.sender._id)
+                : "https://www.gravatar.com/avatar?d=mp&s=200"
+            }
+          />
+        </Link>
         <ContentWrapper>
-          <Link
-            style={{ fontSize: ".9rem" }}
-            to={`/user/${message.sender._id}`}
-          >
-            {message.sender.name}
-          </Link>
+          {!isOwn && (
+            <Link
+              style={{ fontSize: ".8rem" }}
+              to={`/user/${message.sender._id}`}
+            >
+              {message.sender.name}
+            </Link>
+          )}
           <Content>{message.content}</Content>
           <Time>{moment(message.created).fromNow()}</Time>
         </ContentWrapper>

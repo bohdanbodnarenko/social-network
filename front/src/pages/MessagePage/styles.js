@@ -7,7 +7,7 @@ export const MessagesWrapper = styled.div `
     align-items:center;
     background: red;
     margin:10px auto;
-    height:89vh;
+    height:91vh;
     background-color: #222222;
     position:relative;
     border-radius:10px;
@@ -19,8 +19,8 @@ export const MessagesContainer = styled.div `
     max-height:100%;
     overflow-y:scroll;
     width: 100%;
-    height: 100%;
+    height: 90%;
     padding:15px 10px;
     position:relative;
-    padding-bottom:80px;    
+    padding-bottom:50px
 `

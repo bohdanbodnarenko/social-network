@@ -7,6 +7,7 @@ import { MessagesWrapper, MessagesContainer } from "./styles";
 import Spinner from "../../UI/Spinner/Spinner";
 import SingleMessage from "./SingleMessage/SingleMessage";
 import { sendMessage } from "../../utils/requests";
+import { Fade } from "react-reveal";
 
 export class MessagePage extends Component {
   state = {
@@ -39,29 +40,31 @@ export class MessagePage extends Component {
     const { targetUser, messageText } = this.state;
     const { channel, currentUser } = this.props;
     return (
-      <MessagesWrapper>
-        {channel ? (
-          <Fragment>
-            <MessageHeader user={targetUser} name={channel.name} />
-            <MessagesContainer>
-              {channel.messages.map(message => (
-                <SingleMessage
-                  key={message._id}
-                  message={message}
-                  currentUser={currentUser}
-                />
-              ))}
-            </MessagesContainer>
-            <MessageForm
-              messageText={messageText}
-              submit={this.sendMessage}
-              change={this.handleChange}
-            />
-          </Fragment>
-        ) : (
-          <Spinner small />
-        )}
-      </MessagesWrapper>
+      <Fade>
+        <MessagesWrapper>
+          {channel ? (
+            <Fragment>
+              <MessageHeader user={targetUser} name={channel.name} />
+              <MessagesContainer>
+                {channel.messages.map(message => (
+                  <SingleMessage
+                    key={message._id}
+                    message={message}
+                    currentUser={currentUser}
+                  />
+                ))}
+              </MessagesContainer>
+              <MessageForm
+                messageText={messageText}
+                submit={this.sendMessage}
+                change={this.handleChange}
+              />
+            </Fragment>
+          ) : (
+            <Spinner small />
+          )}
+        </MessagesWrapper>
+      </Fade>
     );
   }
 }

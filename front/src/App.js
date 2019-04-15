@@ -11,9 +11,6 @@ import { theme } from "./theme";
 import socket from './utils/sockets'
 export const history = createBrowserHistory();
 class App extends Component {
-  componentDidUpdate(prevProps, prevState) {
-    console.log(history);
-  }
 
   render() {
     socket.on("connected", data => console.log(data));

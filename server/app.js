@@ -49,9 +49,8 @@ app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/", channelRoutes);
 io.on('connection', client => {
-  if (client) {
-    client.emit('connected', 'Web sockets connected')
-  }
+  console.log(client.handshake)
+  client.emit('connected', 'Web sockets connected')
 })
 
 const port = process.env.PORT || 8080;

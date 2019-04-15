@@ -1,11 +1,16 @@
 import {
     fade
 } from "@material-ui/core/styles/colorManipulator";
+import {
+    colors
+} from "../../../theme";
 
 export const styles = theme => ({
     root: {
         width: "100%",
-        borderRadius: 4
+        borderRadius: 4,
+        backgroundColor: colors.darkGrey,
+        zIndex: 2
     },
     grow: {
         flexGrow: 1,
