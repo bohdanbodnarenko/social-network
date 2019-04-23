@@ -9,8 +9,12 @@ import {
   InputAdornment,
   IconButton
 } from "@material-ui/core";
-import * as Icons from "@material-ui/icons";
 import httpService from "../../utils/httpService/httpService";
+import LockRounded from "react-icons/lib/io/ios-locked";
+import MailOutlineRounded from "react-icons/lib/io/ios-email";
+import Visibility from "react-icons/lib/io/eye";
+import VisibilityOff from "react-icons/lib/io/eye-disabled";
+import PersonOutlineOutlined from "react-icons/lib/io/ios-person";
 
 class LandingPage extends Component {
   state = {
@@ -80,7 +84,7 @@ class LandingPage extends Component {
         <div className="header">
           <div className="text-box">
             <h1 className="heading-primary">
-              <span className="heading-primary-main">Social Network</span>
+              <span className="heading-primary-main">Connector</span>
               <span className="heading-primary-sub"> Try it now</span>
             </h1>
             <button onClick={this.scrollToRegister} className="btn btn-white">
@@ -195,7 +199,7 @@ class LandingPage extends Component {
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <Icons.PersonOutlineOutlined />
+                            <PersonOutlineOutlined className="middleIcon" />
                           </InputAdornment>
                         )
                       }}
@@ -211,7 +215,7 @@ class LandingPage extends Component {
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <Icons.MailOutlineRounded />
+                            <MailOutlineRounded className="middleIcon" />
                           </InputAdornment>
                         )
                       }}
@@ -228,7 +232,7 @@ class LandingPage extends Component {
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <Icons.LockRounded />
+                            <LockRounded className="middleIcon" />
                           </InputAdornment>
                         ),
                         endAdornment: (
@@ -238,9 +242,9 @@ class LandingPage extends Component {
                               onClick={this.handleClickShowPassword}
                             >
                               {showPassword ? (
-                                <Icons.VisibilityOff />
+                                <Visibility />
                               ) : (
-                                <Icons.Visibility />
+                                <VisibilityOff />
                               )}
                             </IconButton>
                           </InputAdornment>

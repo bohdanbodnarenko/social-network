@@ -25,13 +25,25 @@ a {
 }
 
 a:hover {
-  color: #7B4BC4
+  color: #7b4bc4;
 }
 
 .primaryText {
-  color: #5545CC;
+  color: #5545cc;
 }
 
 .activeLink {
   color: #464646;
+}
+
+.middleIcon {
+  font-size: 1.5em;
+}
+
+.bigIcon {
+  font-size: 1.8em;
+}
+
+svg {
+  font-size: 1.2em;
 }

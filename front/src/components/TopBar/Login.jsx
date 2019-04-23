@@ -15,6 +15,10 @@ import {
   LinearProgress
 } from "@material-ui/core";
 import * as Icons from "@material-ui/icons";
+import LockRounded from "react-icons/lib/io/ios-locked";
+import MailOutlineRounded from "react-icons/lib/io/ios-email";
+import Visibility from "react-icons/lib/io/eye";
+import VisibilityOff from "react-icons/lib/io/eye-disabled";
 import httpService from "../../utils/httpService/httpService";
 import { signinSuccess } from "../../store/auth/actions";
 
@@ -124,7 +128,7 @@ class Signup extends React.Component {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Icons.MailOutlineRounded />
+                      <MailOutlineRounded className="middleIcon" />
                     </InputAdornment>
                   )
                 }}
@@ -142,7 +146,7 @@ class Signup extends React.Component {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Icons.LockRounded />
+                      <LockRounded className="middleIcon" />
                     </InputAdornment>
                   ),
                   endAdornment: (
@@ -151,11 +155,7 @@ class Signup extends React.Component {
                         aria-label="Toggle password visibility"
                         onClick={this.handleClickShowPassword}
                       >
-                        {showPassword ? (
-                          <Icons.VisibilityOff />
-                        ) : (
-                          <Icons.Visibility />
-                        )}
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
                   )
