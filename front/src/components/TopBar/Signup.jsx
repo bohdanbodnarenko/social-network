@@ -12,7 +12,11 @@ import {
   InputAdornment,
   IconButton
 } from "@material-ui/core";
-import * as Icons from "@material-ui/icons";
+import LockRounded from "react-icons/lib/io/ios-locked";
+import MailOutlineRounded from "react-icons/lib/io/ios-email";
+import Visibility from "react-icons/lib/io/eye";
+import VisibilityOff from "react-icons/lib/io/eye-disabled";
+import PersonOutlineOutlined from "react-icons/lib/io/ios-person";
 import httpService from "../../utils/httpService/httpService";
 
 const styles = theme =>
@@ -116,7 +120,7 @@ class Login extends React.Component {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Icons.PersonOutlineOutlined />
+                      <PersonOutlineOutlined className="middleIcon" />
                     </InputAdornment>
                   )
                 }}
@@ -133,7 +137,7 @@ class Login extends React.Component {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Icons.MailOutlineRounded />
+                      <MailOutlineRounded className="middleIcon" />
                     </InputAdornment>
                   )
                 }}
@@ -151,7 +155,7 @@ class Login extends React.Component {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Icons.LockRounded />
+                      <LockRounded className="middleIcon" />
                     </InputAdornment>
                   ),
                   endAdornment: (
@@ -160,11 +164,7 @@ class Login extends React.Component {
                         aria-label="Toggle password visibility"
                         onClick={this.handleClickShowPassword}
                       >
-                        {showPassword ? (
-                          <Icons.VisibilityOff />
-                        ) : (
-                          <Icons.Visibility />
-                        )}
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
                   )

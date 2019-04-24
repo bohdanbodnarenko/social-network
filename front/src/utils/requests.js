@@ -1,7 +1,7 @@
 import httpService from "./httpService/httpService";
 
-export const signout = async () => httpService.get("signout")
-export const signin = async (dataToSend) => httpService.get("signin", dataToSend)
+export const signout = async () => httpService.get("signout");
+export const signin = async dataToSend => httpService.get("signin", dataToSend);
 
 export const confirmPassword = async password => {
   const res = await httpService.post("user/confirm", {
@@ -35,25 +35,21 @@ export const getLinkToPostImage = id => {
 };
 
 export const getLinkToPrivateChannel = async userId => {
-  const res = await httpService.post('/channels/private', {
+  const res = await httpService.post("/channels/private", {
     userId
-  })
-  console.log(res)
+  });
+  console.log(res);
   if (res) {
     return res.data;
   }
-}
+};
 
-export const sendMessage = async (channelId, content) => {
-  const res = await httpService.put('/channels/message', {
+export const sendMessage = (channelId, content) => {
+  httpService.put("/channels/message", {
     channelId,
     content
-  })
-  console.log(res)
-  if (res) {
-    return res.data;
-  }
-}
+  });
+};
 
 export const deletePost = async id => httpService.delete(`/posts/${id}`);
 

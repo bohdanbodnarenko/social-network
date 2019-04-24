@@ -51,7 +51,7 @@ app.use("/", userRoutes);
 app.use("/", channelRoutes);
 
 io.on("connection", socketManager);
-io.on("user_connected", userConnected);
+// io.on("user_connected", userConnected);
 
 const port = process.env.PORT || 8080;
 

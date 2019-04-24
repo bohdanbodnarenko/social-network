@@ -14,7 +14,6 @@ export class Messages extends Component {
 
   render() {
     const { channels, currentUser } = this.props;
-    console.log(channels, currentUser);
     return (
       <div>
         {channels && channels.length > 0 && (

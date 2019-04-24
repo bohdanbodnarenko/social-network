@@ -175,9 +175,13 @@ exports.like = (req, res) => {
         });
       }
       req.app.io.emit("post_updated", result);
-      for (let item of req.app.io.sockets.adapter.rooms) {
-        console.log(item);
-      }
+      // for (let item of req.app.io.sockets.adapter.rooms) {
+      //   console.log(item);
+      // }
+      console.log(Object.values(req.app.io.sockets.adapter.rooms));
+      // for (let user of Object.values(req.app.io.sockets.adapter.rooms)) {
+      //   console.log(user.sockets);
+      // }
 
       res.json({
         result
@@ -205,6 +209,7 @@ exports.unlike = (req, res) => {
           error
         });
       }
+      console.log(Object.values(req.app.io.sockets.adapter.rooms));
       req.app.io.emit("post_updated", result);
       res.json({
         result

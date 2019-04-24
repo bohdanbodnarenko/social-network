@@ -25,7 +25,9 @@ import { Button, Fab } from "@material-ui/core";
 import Signup from "./Signup";
 import Login from "./Login";
 import { logout } from "../../store/auth/actions";
-import { MenuRounded, CloseRounded } from "@material-ui/icons";
+import { MenuRounded } from "@material-ui/icons";
+import CloseRounded from "react-icons/lib/io/close-round";
+import Logo from "react-icons/lib/ti/flow-merge";
 import socket from "../../utils/sockets";
 import { withRouter } from "react-router-dom";
 
@@ -71,11 +73,10 @@ export class TopBar extends Component {
         this.props.history.push("/feed");
         socket.emit("user_connected", this.props.auth.currentUser);
       }
-    } 
+    }
   }
 
   componentDidMount = () => {
-    console.log(this.props.auth.currentUser);
     socket.emit("user_connected", this.props.auth.currentUser);
   };
 
@@ -210,7 +211,8 @@ export class TopBar extends Component {
                 color="primary"
                 noWrap
               >
-                Social Network
+                <Logo className="middleIcon" style={{ padding: "0 0.2em" }} />
+                Connector{" "}
               </Typography>
             </Link>
             <div className={classes.grow} />

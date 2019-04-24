@@ -12,24 +12,45 @@ import { Fade } from "react-reveal";
 export class MessagePage extends Component {
   state = {
     targetUser: null,
-    messageText: ""
+    messageText: "",
+    channel: null,
+    messages: []
   };
   componentDidMount = () => {
     this.props.getChannel(this.props.match.params.channelId);
+    this.scrollToBottom();
+  };
+
+  scrollToBottom = () => {
+    if (this.messagesEnd) {
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.channel && nextProps.channel.isPrivate) {
-      this.setState({
-        targetUser: nextProps.channel.participants.filter(
-          el => el._id !== nextProps.currentUser._id
-        )[0]
-      });
+    if (nextProps.channel !== this.props.channel) {
+      this.scrollToBottom();
+      this.setState({ messages: nextProps.channel.messages });
+    }
+    if (
+      !this.state.channel ||
+      nextProps.channel._id !== this.state.channel._id
+    ) {
+      this.setState({ channel: nextProps.channel });
+      if (nextProps.channel && nextProps.channel.isPrivate) {
+        this.setState({
+          targetUser: nextProps.channel.participants.filter(
+            el => el._id !== nextProps.currentUser._id
+          )[0]
+        });
+      }
     }
   }
 
   handleChange = event => {
-    this.setState({ messageText: event.target.value });
+    this.setState({
+      messageText: event.target.value
+    });
   };
   sendMessage = () => {
     sendMessage(this.props.channel._id, this.state.messageText);
@@ -37,8 +58,8 @@ export class MessagePage extends Component {
   };
 
   render() {
-    const { targetUser, messageText } = this.state;
-    const { channel, currentUser } = this.props;
+    const { targetUser, messageText, messages } = this.state;
+    const { currentUser, channel } = this.props;
     return (
       <Fade>
         <MessagesWrapper>
@@ -53,6 +74,14 @@ export class MessagePage extends Component {
                     currentUser={currentUser}
                   />
                 ))}
+                <div
+                  style={{
+                    position: "relative",
+                    bottom: "0px",
+                    paddingTop: "8%"
+                  }}
+                  ref={node => (this.messagesEnd = node)}
+                />
               </MessagesContainer>
               <MessageForm
                 messageText={messageText}
