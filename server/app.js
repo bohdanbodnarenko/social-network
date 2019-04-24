@@ -8,8 +8,9 @@ const express = require("express"),
   channelRoutes = require("./routes/channel"),
   fs = require("fs"),
   cors = require("cors"),
-  http = require('http').Server(app),
-  io = require('socket.io')(http);
+  http = require("http").Server(app),
+  io = require("socket.io")(http),
+  { socketManager, userConnected } = require("./sockets/SocketManager");
 
 app.io = io;
 //Config env
@@ -48,10 +49,9 @@ app.use("/", postRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/", channelRoutes);
-io.on('connection', client => {
-  console.log(client.handshake)
-  client.emit('connected', 'Web sockets connected')
-})
+
+io.on("connection", socketManager);
+io.on("user_connected", userConnected);
 
 const port = process.env.PORT || 8080;
 

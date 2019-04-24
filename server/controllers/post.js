@@ -1,12 +1,8 @@
 const Post = require("../models/post"),
-  {
-    IncomingForm
-  } = require("formidable"),
+  { IncomingForm } = require("formidable"),
   fs = require("fs"),
   _ = require("lodash"),
-  jwt = require("jsonwebtoken"),
-  User = require("../models/user"),
-  io = require("socket.io");
+  User = require("../models/user");
 exports.getPosts = (req, res) => {
   const posts = Post.find()
     .sort({
@@ -16,9 +12,9 @@ exports.getPosts = (req, res) => {
     .then(posts => {
       posts.map(post => {
         if (post.photo) {
-          post.photo.data = undefined
+          post.photo.data = undefined;
         }
-      })
+      });
       res.json({
         posts
       });
@@ -51,7 +47,7 @@ exports.createPost = async (req, res, next) => {
         });
       }
       if (result.photo) {
-        result.photo.data = undefined
+        result.photo.data = undefined;
       }
       res.json(result);
     });
@@ -60,8 +56,8 @@ exports.createPost = async (req, res, next) => {
 
 exports.postsByUser = (req, res) => {
   Post.find({
-      postedBy: req.profile._id
-    })
+    postedBy: req.profile._id
+  })
     .populate("postedBy", "_id name photo")
     .sort({
       created: -1
@@ -74,9 +70,9 @@ exports.postsByUser = (req, res) => {
       }
       posts.map(post => {
         if (post.photo) {
-          post.photo.data = undefined
+          post.photo.data = undefined;
         }
-      })
+      });
       res.json(posts);
     });
 };
@@ -112,7 +108,7 @@ exports.updatePost = (req, res, next) => {
       });
     }
     if (post.photo) {
-      post.photo.data = undefined
+      post.photo.data = undefined;
     }
     res.json(post);
   });
@@ -120,26 +116,22 @@ exports.updatePost = (req, res, next) => {
 
 exports.isPoster = (req, res, next) => {
   if (req.post.postedBy._id != req.auth._id) {
-    return res
-      .status(403)
-      .json({
-        error: "You are not the creator of this post!"
-      });
+    return res.status(403).json({
+      error: "You are not the creator of this post!"
+    });
   }
   next();
 };
 
 exports.getPostById = (req, res) => {
-  const {
-    post
-  } = req;
+  const { post } = req;
   if (!post) {
     return res.status(404).json({
       error: "Post not found!"
     });
   }
   if (post.photo) {
-    post.photo.data = undefined
+    post.photo.data = undefined;
   }
   res.json({
     post
@@ -161,23 +153,32 @@ exports.deletePost = (req, res, next) => {
 };
 
 exports.like = (req, res) => {
-  Post.findOneAndUpdate({
+  Post.findOneAndUpdate(
+    {
       _id: req.body.postId
-    }, {
+    },
+    {
       $addToSet: {
         likes: req.body.userId
       }
-    }, {
+    },
+    {
       new: true
-    })
+    }
+  )
     .populate("postedBy", "id name photo.contentType")
-    .populate("comments.postedBy", "_id name photo.contentType").exec((error, result) => {
+    .populate("comments.postedBy", "_id name photo.contentType")
+    .exec((error, result) => {
       if (error) {
         return res.status(400).json({
           error
         });
       }
-      req.app.io.emit('post_updated', result)
+      req.app.io.emit("post_updated", result);
+      for (let item of req.app.io.sockets.adapter.rooms) {
+        console.log(item);
+      }
+
       res.json({
         result
       });
@@ -186,22 +187,25 @@ exports.like = (req, res) => {
 
 exports.unlike = (req, res) => {
   Post.findByIdAndUpdate(
-      req.body.postId, {
-        $pull: {
-          likes: req.body.userId
-        }
-      }, {
-        new: true
+    req.body.postId,
+    {
+      $pull: {
+        likes: req.body.userId
       }
-    )
+    },
+    {
+      new: true
+    }
+  )
     .populate("postedBy", "id name photo.contentType")
-    .populate("comments.postedBy", "_id name photo.contentType").exec((error, result) => {
+    .populate("comments.postedBy", "_id name photo.contentType")
+    .exec((error, result) => {
       if (error) {
         return res.status(400).json({
           error
         });
       }
-      req.app.io.emit('post_updated', result)
+      req.app.io.emit("post_updated", result);
       res.json({
         result
       });
@@ -211,18 +215,22 @@ exports.unlike = (req, res) => {
 exports.comment = (req, res) => {
   let comment = req.body.comment;
   comment.postedBy = req.body.userId;
-  Post.findOneAndUpdate({
+  Post.findOneAndUpdate(
+    {
       _id: req.body.postId
-    }, {
+    },
+    {
       $push: {
         comments: comment
       },
       $inc: {
         commentsCount: 1
       }
-    }, {
+    },
+    {
       new: true
-    })
+    }
+  )
     .populate("comments.postedBy", "_id name photo")
     .populate("postedBy", "_id name photo")
     .exec((error, result) => {
@@ -231,7 +239,7 @@ exports.comment = (req, res) => {
           error
         });
       }
-      req.app.io.emit('post_updated', result)
+      req.app.io.emit("post_updated", result);
       res.json({
         result
       });
@@ -240,9 +248,11 @@ exports.comment = (req, res) => {
 
 exports.uncomment = (req, res) => {
   const comment = req.body.comment;
-  Post.findOneAndUpdate({
+  Post.findOneAndUpdate(
+    {
       _id: req.body.postId
-    }, {
+    },
+    {
       $pull: {
         comments: {
           _id: comment._id
@@ -251,9 +261,11 @@ exports.uncomment = (req, res) => {
       $inc: {
         commentsCount: -1
       }
-    }, {
+    },
+    {
       new: true
-    })
+    }
+  )
     .populate("comments.postedBy", "_id name photo")
     .populate("postedBy", "_id name photo")
     .exec((error, result) => {
@@ -262,7 +274,7 @@ exports.uncomment = (req, res) => {
           error
         });
       }
-      req.app.io.emit('post_updated', result)
+      req.app.io.emit("post_updated", result);
       res.json({
         result
       });
@@ -276,22 +288,22 @@ exports.getPostsFollowing = (req, res) => {
         error
       });
     }
-    const {
-      following
-    } = result;
+    const { following } = result;
     Post.find({
       postedBy: {
         $in: following
       }
-    }).populate("postedBy", "_id name photo").exec((err, posts) => {
-      if (err) {
-        return res.status(400).json({
-          err
-        });
-      }
-      res.json({
-        posts
-      });
     })
-  })
-}
+      .populate("postedBy", "_id name photo")
+      .exec((err, posts) => {
+        if (err) {
+          return res.status(400).json({
+            err
+          });
+        }
+        res.json({
+          posts
+        });
+      });
+  });
+};

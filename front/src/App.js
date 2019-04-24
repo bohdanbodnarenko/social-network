@@ -8,13 +8,15 @@ import store from "./store/store";
 import TopShape from "./UI/Shapes/TopShape";
 import BottomShape from "./UI/Shapes/BottomShape";
 import { theme } from "./theme";
-import socket from './utils/sockets'
+import socket from "./utils/sockets";
 export const history = createBrowserHistory();
 class App extends Component {
-
-  render() {
+  componentWillMount() {
     socket.on("connected", data => console.log(data));
     setupInterceptors(store, history);
+  }
+
+  render() {
     return (
       <Fragment>
         <MuiThemeProvider theme={theme}>

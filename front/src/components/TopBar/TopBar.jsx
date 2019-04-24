@@ -26,6 +26,8 @@ import Signup from "./Signup";
 import Login from "./Login";
 import { logout } from "../../store/auth/actions";
 import { MenuRounded, CloseRounded } from "@material-ui/icons";
+import socket from "../../utils/sockets";
+import { withRouter } from "react-router-dom";
 
 export class TopBar extends Component {
   state = {
@@ -58,6 +60,23 @@ export class TopBar extends Component {
     if (this.state.mobileMoreAnchorEl) {
       this.handleMobileMenuClose();
     }
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.auth !== this.props.auth.auth) {
+      if (!nextProps.auth.auth) {
+        this.props.history.push("/");
+        socket.emit("user_disconnected", this.props.auth.currentUser);
+      } else {
+        this.props.history.push("/feed");
+        socket.emit("user_connected", this.props.auth.currentUser);
+      }
+    } 
+  }
+
+  componentDidMount = () => {
+    console.log(this.props.auth.currentUser);
+    socket.emit("user_connected", this.props.auth.currentUser);
   };
 
   render() {
@@ -259,7 +278,9 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logout())
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(TopBar));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(withStyles(styles)(TopBar))
+);
