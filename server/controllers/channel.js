@@ -61,14 +61,23 @@ exports.getChannelById = (req, res) => {
       error: "Access denied"
     });
   }
-  res.json({
-    channel
-  });
+  const limit = +req.query.limit || 150,
+    offset = channel.messages.length - (+req.query.offset || 0);
+//   channel.messages = channel.messages.slice(offset - limit, offset);
+  if (req.query.onlyMessages) {
+    res.json({
+      messages: channel.messages
+    });
+  } else {
+    res.json({
+      channel
+    });
+  }
 };
 
 exports.channelById = (req, res, next, id) => {
   Channel.findById(id)
-    .populate("participants", "_id name photo.contentType")
+    .populate("participants", "_id name photo.contentType online")
     .populate("messages.sender", "name photo.contentType")
     .exec((error, channel) => {
       if (error || !channel) {
@@ -102,7 +111,7 @@ exports.addMessage = (req, res) => {
       new: true
     }
   )
-    .populate("participants", "_id name photo.contentType")
+    .populate("participants", "_id name photo.contentType online")
     .populate("messages.sender", "_id name photo.contentType")
     .exec((error, result) => {
       if (error) {

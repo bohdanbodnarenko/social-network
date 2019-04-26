@@ -14,7 +14,6 @@ import {
   IconButton,
   LinearProgress
 } from "@material-ui/core";
-import * as Icons from "@material-ui/icons";
 import LockRounded from "react-icons/lib/io/ios-locked";
 import MailOutlineRounded from "react-icons/lib/io/ios-email";
 import Visibility from "react-icons/lib/io/eye";

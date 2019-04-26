@@ -37,6 +37,7 @@ export const ButtonsWrapper = styled.div`
   height: 10vh;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `;
 export const TabContentWrapper = styled.div`
   padding: 24;

@@ -5,14 +5,15 @@ import {
   updateAccount,
   getLinkToUserAvatar,
   followToUser,
-  unfollowFromUser
+  unfollowFromUser,
+  getLinkToPrivateChannel
 } from "../../utils/requests";
 import Spinner from "../../UI/Spinner/Spinner";
 import * as Styles from "./styles";
 import moment from "moment";
 import { connect } from "react-redux";
 import * as Icons from "@material-ui/icons";
-import { IconButton, Avatar, Fab } from "@material-ui/core";
+import { IconButton, Avatar, Fab, Button } from "@material-ui/core";
 import DeletePopup from "./DeletePopup";
 import { logout } from "../../store/auth/actions";
 import UpdatePopup from "./UpdatePopup";
@@ -158,6 +159,11 @@ export class UserPage extends Component {
     }
   };
 
+  handleMessageClick = async () => {
+    const id = await getLinkToPrivateChannel(this.state.user._id);
+    this.props.history.push(`/messages/${id}`);
+  };
+
   render() {
     const {
       user,
@@ -237,6 +243,13 @@ export class UserPage extends Component {
               >
                 {following ? "Unfollow" : "Follow"}
               </Fab>
+              <Button
+                disabled={loading}
+                onClick={this.handleMessageClick}
+                color={user.online ? "primary" : "secondary"}
+              >
+                Message
+              </Button>
             </Styles.ButtonsWrapper>
           )}
 

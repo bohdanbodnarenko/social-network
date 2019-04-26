@@ -3,10 +3,10 @@ import { getChannelById } from "../../store/channels/actions";
 import { connect } from "react-redux";
 import MessageForm from "./MessageForm/MessageForm";
 import MessageHeader from "./MessageHeader/MessageHeader";
-import { MessagesWrapper, MessagesContainer } from "./styles";
+import { MessagesWrapper, MessagesContainer, MessagesEnd } from "./styles";
 import Spinner from "../../UI/Spinner/Spinner";
 import SingleMessage from "./SingleMessage/SingleMessage";
-import { sendMessage } from "../../utils/requests";
+import { sendMessage, getMessagesByChannelId } from "../../utils/requests";
 import { Fade } from "react-reveal";
 
 export class MessagePage extends Component {
@@ -14,12 +14,16 @@ export class MessagePage extends Component {
     targetUser: null,
     messageText: "",
     channel: null,
-    messages: []
+    messages: [],
+    loading: false
   };
   componentDidMount = () => {
     this.props.getChannel(this.props.match.params.channelId);
-    this.scrollToBottom();
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    this.scrollToBottom();
+  }
 
   scrollToBottom = () => {
     if (this.messagesEnd) {
@@ -30,7 +34,10 @@ export class MessagePage extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.channel !== this.props.channel) {
       this.scrollToBottom();
-      this.setState({ messages: nextProps.channel.messages });
+      this.setState({
+        messages: nextProps.channel.messages,
+        channel: nextProps.channel
+      });
     }
     if (
       !this.state.channel ||
@@ -53,8 +60,34 @@ export class MessagePage extends Component {
     });
   };
   sendMessage = () => {
-    sendMessage(this.props.channel._id, this.state.messageText);
-    this.setState({ messageText: "" });
+    if (this.state.messageText) {
+      sendMessage(this.props.channel._id, this.state.messageText);
+      this.setState({ messageText: "" });
+    }
+  };
+  //! TODO it does not work correct
+  fetchMoreMessages = async () => {
+    this.setState({ loading: true });
+    const { data } = await getMessagesByChannelId(
+      this.props.channel._id,
+      this.state.messages.length
+    );
+    const { messages } = data;
+    if (messages && messages.length > 0) {
+      this.setState({
+        messages: this.state.messages
+          .concat(messages)
+          .sort((a, b) => b.created - a.created),
+        loading: false
+      });
+      console.log(this.state);
+    }
+  };
+
+  handleScroll = event => {
+    if (event.target.scrollTop < 200 && !this.state.loading) {
+      // this.fetchMoreMessages();
+    }
   };
 
   render() {
@@ -66,22 +99,18 @@ export class MessagePage extends Component {
           {channel ? (
             <Fragment>
               <MessageHeader user={targetUser} name={channel.name} />
-              <MessagesContainer>
-                {channel.messages.map(message => (
+              <MessagesContainer
+                // ref={node => node && (node.scrollTop = node.scrollHeight)}
+                onScroll={this.handleScroll}
+              >
+                {messages.map(message => (
                   <SingleMessage
                     key={message._id}
                     message={message}
                     currentUser={currentUser}
                   />
                 ))}
-                <div
-                  style={{
-                    position: "relative",
-                    bottom: "0px",
-                    paddingTop: "8%"
-                  }}
-                  ref={node => (this.messagesEnd = node)}
-                />
+                <MessagesEnd ref={node => (this.messagesEnd = node)} />
               </MessagesContainer>
               <MessageForm
                 messageText={messageText}

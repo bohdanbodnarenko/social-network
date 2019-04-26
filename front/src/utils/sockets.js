@@ -24,15 +24,36 @@ socket.on("post_updated", post => {
 });
 
 socket.on("user_updated", user => {
-  const state = store.getState().users;
-  if (state.selectedUser && state.selectedUser._id === user._id) {
+  const state = store.getState();
+  const usersState = state.users;
+  if (usersState.selectedUser && usersState.selectedUser._id === user._id) {
     store.dispatch(setSelectedUser(user));
   } else {
-    const index = state.users.findIndex(el => user._id === el._id);
+    const index = usersState.users.findIndex(el => user._id === el._id);
     if (index > -1) {
-      const newUsers = [...state.users];
+      const newUsers = [...usersState.users];
       newUsers[index] = user;
       store.dispatch(setUsers(newUsers));
+    }
+  }
+});
+
+socket.on("user_status_changed", user => {
+  console.log(user);
+  const state = store.getState();
+  if (state.users.selectedUser && state.users.selectedUser._id === user._id) {
+    const newUser = { ...state.users.selectedUser };
+    newUser.online = user.online;
+    store.dispatch(setSelectedUser(newUser));
+  }
+  if (state.channels.selectedChannel) {
+    const index = state.channels.selectedChannel.participants.findIndex(
+      el => user._id === el._id
+    );
+    if (index >= 0) {
+      const newChannel = { ...state.channels.selectedChannel };
+      newChannel.participants[index].online = user.online;
+      store.dispatch(setSelectedChannel(newChannel));
     }
   }
 });

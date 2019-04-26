@@ -10,6 +10,7 @@ import { styles } from "./styles";
 import { Avatar } from "@material-ui/core";
 import { getLinkToUserAvatar } from "../../../utils/requests";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const MessageHeader = props => {
   const { classes, user, name } = props;
@@ -25,14 +26,21 @@ const MessageHeader = props => {
               : "https://cdn3.iconfinder.com/data/icons/inficons-set-2/512/search-512.png"
           }
         />
-        <Typography
-          className={classes.title}
-          variant="h6"
-          color="inherit"
-          noWrap
-        >
-          {name || (user && <Link to={`/user/${user._id}`}>{user.name}</Link>)}
-        </Typography>
+        <div className={classes.textContainer}>
+          <Typography className={classes.text} variant="h6" color="inherit">
+            {name ||
+              (user && <Link to={`/user/${user._id}`}>{user.name}</Link>)}
+          </Typography>
+          <Typography
+            color={user && user.online ? "primary" : "inherit"}
+            variant="subtitle1"
+            className={classes.text}
+            style={{ opacity: 0.8 }}
+          >
+            {user &&
+              (user.online ? "online" : moment(user.lastActive).fromNow())}
+          </Typography>
+        </div>
         <div className={classes.grow} />
         <div className={classes.search}>
           <div className={classes.searchIcon}>

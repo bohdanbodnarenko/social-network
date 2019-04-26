@@ -51,6 +51,11 @@ export const sendMessage = (channelId, content) => {
   });
 };
 
+export const getMessagesByChannelId = async (id, offset = 0, limit = 50) =>
+  httpService.get(
+    `channels/${id}?offset=${offset}&limit=${limit}&onlyMessages=true`
+  );
+
 export const deletePost = async id => httpService.delete(`/posts/${id}`);
 
 export const followToUser = async (followId, userId) => {

@@ -1,9 +1,7 @@
 const User = require("../models/user");
 const _ = require("lodash"),
   jwt = require("jsonwebtoken"),
-  {
-    IncomingForm
-  } = require("formidable"),
+  { IncomingForm } = require("formidable"),
   fs = require("fs");
 
 exports.userById = (req, res, next, id) => {
@@ -22,9 +20,7 @@ exports.userById = (req, res, next, id) => {
 };
 
 exports.confirmPassword = (req, res) => {
-  const {
-    password
-  } = req.body;
+  const { password } = req.body;
   User.findById(req.auth._id).exec((err, user) => {
     if (err || !user) {
       return res.status(404).json({
@@ -46,9 +42,9 @@ exports.allUsers = (req, res) => {
     }
     users.map(user => {
       if (user.photo) {
-        user.photo.data = undefined
+        user.photo.data = undefined;
       }
-    })
+    });
     res.json({
       users
     });
@@ -56,13 +52,11 @@ exports.allUsers = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  const {
-    profile
-  } = req;
+  const { profile } = req;
   profile.hashed_password = undefined;
   profile.salt = undefined;
   if (profile.photo) {
-    profile.photo.data = undefined
+    profile.photo.data = undefined;
   }
   res.json(profile);
 };
@@ -73,6 +67,13 @@ exports.userPhoto = (req, res, next) => {
     return res.send(req.profile.photo.data);
   }
   next();
+};
+
+exports.toggleUserOnline = async (id, status) => {
+  return User.findOneAndUpdate(
+    { _id: id },
+    { online: status, lastActive: Date.now() }
+  );
 };
 
 exports.updateUser = (req, res, next) => {
@@ -102,9 +103,9 @@ exports.updateUser = (req, res, next) => {
       user.hashed_password = undefined;
       user.salt = undefined;
       if (user.photo) {
-        user.photo.data = undefined
+        user.photo.data = undefined;
       }
-      req.app.io.emit('user_updated', user)
+      req.app.io.emit("user_updated", user);
       res.json(user);
     });
   });
@@ -133,9 +134,11 @@ exports.deleteUser = (req, res, next) => {
 
 //follow
 exports.addFollowing = (req, res, next) => {
-  User.findOneAndUpdate({
+  User.findOneAndUpdate(
+    {
       _id: req.body.userId
-    }, {
+    },
+    {
       $addToSet: {
         following: req.body.followId
       }
@@ -157,21 +160,23 @@ exports.addFollower = (req, res) => {
     _id: req.body.followId
   }).exec((err, followersArr) => {
     if (followersArr.length === 0) {
-      User.findOneAndUpdate({
-            _id: req.body.followId
-          }, {
-            $addToSet: {
-              followers: req.body.userId
-            }
-          },
-          (error, result) => {
-            if (error) {
-              return res.status(400).json({
-                error
-              });
-            }
+      User.findOneAndUpdate(
+        {
+          _id: req.body.followId
+        },
+        {
+          $addToSet: {
+            followers: req.body.userId
           }
-        )
+        },
+        (error, result) => {
+          if (error) {
+            return res.status(400).json({
+              error
+            });
+          }
+        }
+      )
         .populate("following", "_id name")
         .populate("followers", "_id name")
         .exec((error, result) => {
@@ -183,18 +188,20 @@ exports.addFollower = (req, res) => {
           result.hashed_password = undefined;
           result.salt = undefined;
           if (result.photo) {
-            result.photo.data = undefined
+            result.photo.data = undefined;
           }
-          req.app.io.emit('user_updated', result)
+          req.app.io.emit("user_updated", result);
           return res.json(result);
         });
     }
   });
 };
 exports.removeFollowing = (req, res, next) => {
-  User.findOneAndUpdate({
+  User.findOneAndUpdate(
+    {
       _id: req.body.userId
-    }, {
+    },
+    {
       $pull: {
         following: req.body.followId
       }
@@ -211,15 +218,19 @@ exports.removeFollowing = (req, res, next) => {
 };
 
 exports.removeFollower = (req, res) => {
-  User.findOneAndUpdate({
+  User.findOneAndUpdate(
+    {
       _id: req.body.followId
-    }, {
+    },
+    {
       $pull: {
         followers: req.body.userId
       }
-    }, {
+    },
+    {
       new: true
-    })
+    }
+  )
     .populate("following", "_id name")
     .populate("followers", "_id name")
     .exec((error, result) => {
@@ -231,9 +242,9 @@ exports.removeFollower = (req, res) => {
       result.hashed_password = undefined;
       result.salt = undefined;
       if (result.photo) {
-        result.photo.data = undefined
+        result.photo.data = undefined;
       }
-      req.app.io.emit('user_updated', result)
+      req.app.io.emit("user_updated", result);
       return res.json(result);
     });
 };

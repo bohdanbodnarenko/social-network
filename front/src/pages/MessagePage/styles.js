@@ -23,3 +23,12 @@ export const MessagesContainer = styled.div`
   position: relative;
   /* padding-bottom:50px */
 `;
+
+export const MessagesEnd = styled.div`
+  position: relative;
+  bottom: 0px;
+  padding-top: 3%;
+  @media (max-width: 800px) {
+    padding-top: 5%;
+  }
+`;

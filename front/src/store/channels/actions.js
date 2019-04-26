@@ -12,9 +12,16 @@ export const getChannels = () => async dispatch => {
   }
 };
 
-export const getChannelById = id => async dispatch => {
+export const getChannelById = (
+  id,
+  offset = 0,
+  limit = 150,
+  onlyMessages = false
+) => async dispatch => {
   if (id) {
-    const { data } = await httpService.get(`channels/${id}`);
+    const { data } = await httpService.get(
+      `channels/${id}?offset=${offset}&limit=${limit}`
+    );
     if (data) {
       dispatch(setSelectedChannel(data.channel));
     }
