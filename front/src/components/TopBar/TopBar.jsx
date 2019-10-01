@@ -1,35 +1,35 @@
-import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import Badge from "@material-ui/core/Badge";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import { withStyles } from "@material-ui/core/styles";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import Exit from "@material-ui/icons/ExitToAppRounded";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Badge from '@material-ui/core/Badge';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import { withStyles } from '@material-ui/core/styles';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MailIcon from '@material-ui/icons/Mail';
+import Exit from '@material-ui/icons/ExitToAppRounded';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import MoreIcon from '@material-ui/icons/MoreVert';
 import {
   styles,
   SideMenu,
   LinksWrapper,
   CustomLink,
   CloseWrapper
-} from "./styles";
-import { Button, Fab } from "@material-ui/core";
-import Signup from "./Signup";
-import Login from "./Login";
-import { logout } from "../../store/auth/actions";
-import { MenuRounded } from "@material-ui/icons";
-import CloseRounded from "react-icons/lib/io/close-round";
-import Logo from "react-icons/lib/ti/flow-merge";
-import socket from "../../utils/sockets";
-import { withRouter } from "react-router-dom";
+} from './styles';
+import { Button, Fab } from '@material-ui/core';
+import Signup from './Signup';
+import Login from './Login';
+import { logout } from '../../store/auth/actions';
+import { MenuRounded } from '@material-ui/icons';
+import CloseRounded from 'react-icons/lib/io/close-round';
+import Logo from 'react-icons/lib/ti/flow-merge';
+import socket from '../../utils/sockets';
+import { withRouter } from 'react-router-dom';
 
 export class TopBar extends Component {
   state = {
@@ -67,17 +67,17 @@ export class TopBar extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.auth !== this.props.auth.auth) {
       if (!nextProps.auth.auth) {
-        this.props.history.push("/");
-        socket.emit("user_disconnected", this.props.auth.currentUser);
+        this.props.history.push('/');
+        socket.emit('user_disconnected', this.props.auth.currentUser);
       } else {
-        this.props.history.push("/feed");
-        socket.emit("user_connected", this.props.auth.currentUser);
+        this.props.history.push('/feed');
+        socket.emit('user_connected', this.props.auth.currentUser);
       }
     }
   }
 
   componentDidMount = () => {
-    socket.emit("user_connected", this.props.auth.currentUser);
+    socket.emit('user_connected', this.props.auth.currentUser);
   };
 
   render() {
@@ -92,11 +92,11 @@ export class TopBar extends Component {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const renderMenu = auth.auth && (
+    const renderMenu = auth.auth && auth.currentUser && (
       <Menu
         anchorEl={anchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
@@ -110,38 +110,38 @@ export class TopBar extends Component {
     const renderMobileMenu = !auth.auth ? (
       <Menu
         anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleClick("signupOpen")}>
-          <Typography color="primary">Sign up</Typography>
+        <MenuItem onClick={this.handleClick('signupOpen')}>
+          <Typography color='primary'>Sign up</Typography>
         </MenuItem>
-        <MenuItem onClick={this.handleClick("loginOpen")}>
+        <MenuItem onClick={this.handleClick('loginOpen')}>
           <Typography>Login</Typography>
         </MenuItem>
       </Menu>
     ) : (
       <Menu
         anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="primary">
-            <Badge badgeContent={4} color="secondary">
+          <IconButton color='primary'>
+            <Badge badgeContent={4} color='secondary'>
               <MailIcon />
             </Badge>
           </IconButton>
           <p>Messages</p>
         </MenuItem>
         <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="primary">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon color="primary" />
+          <IconButton color='primary'>
+            <Badge badgeContent={11} color='secondary'>
+              <NotificationsIcon color='primary' />
             </Badge>
           </IconButton>
           <p>Notifications</p>
@@ -163,31 +163,31 @@ export class TopBar extends Component {
       </Menu>
     );
     const links = [
-      { name: "All users", path: "/users" },
-      { name: "Feed", path: "/feed" },
-      { name: "Messages", path: "/messages" },
-      { name: "Home", path: "/" }
+      { name: 'All users', path: '/users' },
+      { name: 'Feed', path: '/feed' },
+      { name: 'Messages', path: '/messages' },
+      { name: 'Home', path: '/' }
     ];
     const renderSideMenu = (
       <SideMenu
-        color="primary"
-        onClick={this.handleClick("menuOpen")}
+        color='primary'
+        onClick={this.handleClick('menuOpen')}
         open={menuOpen}
-        className="primaryText"
+        className='primaryText'
       >
-        <IconButton onClick={this.handleClick("menuOpen")}>
+        <IconButton onClick={this.handleClick('menuOpen')}>
           <MenuRounded />
         </IconButton>
         {menuOpen && (
           <LinksWrapper>
             <CloseWrapper>
-              <IconButton className="primaryText">
-                <CloseRounded className="primaryText" />
+              <IconButton className='primaryText'>
+                <CloseRounded className='primaryText' />
               </IconButton>
             </CloseWrapper>
             {links.map(link => (
               <CustomLink key={link.path}>
-                <NavLink exact activeClassName="activeLink" to={link.path}>
+                <NavLink exact activeClassName='activeLink' to={link.path}>
                   {link.name}
                 </NavLink>
               </CustomLink>
@@ -199,20 +199,20 @@ export class TopBar extends Component {
 
     return (
       <div className={classes.root}>
-        <Signup open={signupOpen} close={this.handleClick("signupOpen")} />
-        <Login open={loginOpen} close={this.handleClick("loginOpen")} />
-        <AppBar className={classes.appBar} position="static">
+        <Signup open={signupOpen} close={this.handleClick('signupOpen')} />
+        <Login open={loginOpen} close={this.handleClick('loginOpen')} />
+        <AppBar className={classes.appBar} position='static'>
           <Toolbar>
             {auth.auth && renderSideMenu}
-            <Link to={auth.auth ? "/feed" : "/"}>
+            <Link to={auth.auth ? '/feed' : '/'}>
               <Typography
                 className={classes.title}
-                variant="h5"
-                color="primary"
+                variant='h5'
+                color='primary'
                 noWrap
               >
-                <Logo className="middleIcon" style={{ padding: "0 0.2em" }} />
-                Connector{" "}
+                <Logo className='middleIcon' style={{ padding: '0 0.2em' }} />
+                Connector{' '}
               </Typography>
             </Link>
             <div className={classes.grow} />
@@ -220,34 +220,34 @@ export class TopBar extends Component {
               {!auth.auth ? (
                 <Fragment>
                   <Button
-                    onClick={this.handleClick("loginOpen")}
+                    onClick={this.handleClick('loginOpen')}
                     className={classes.button}
                   >
                     Login
                   </Button>
                   <Fab
-                    onClick={this.handleClick("signupOpen")}
-                    variant="extended"
-                    color="primary"
+                    onClick={this.handleClick('signupOpen')}
+                    variant='extended'
+                    color='primary'
                     className={classes.button}
                   >
-                    <span className="whiteText">Sign up</span>
+                    <span className='whiteText'>Sign up</span>
                   </Fab>
                 </Fragment>
               ) : (
                 <Fragment>
                   <IconButton>
-                    <Badge badgeContent={4} color="secondary">
+                    <Badge badgeContent={4} color='secondary'>
                       <MailIcon />
                     </Badge>
                   </IconButton>
                   <IconButton>
-                    <Badge badgeContent={17} color="secondary">
+                    <Badge badgeContent={17} color='secondary'>
                       <NotificationsIcon />
                     </Badge>
                   </IconButton>
                   <IconButton
-                    aria-haspopup="true"
+                    aria-haspopup='true'
                     onClick={this.handleProfileMenuOpen}
                   >
                     <AccountCircle />
@@ -257,7 +257,7 @@ export class TopBar extends Component {
             </div>
             <div className={classes.sectionMobile}>
               <IconButton
-                aria-haspopup="true"
+                aria-haspopup='true'
                 onClick={this.handleMobileMenuOpen}
               >
                 <MoreIcon />

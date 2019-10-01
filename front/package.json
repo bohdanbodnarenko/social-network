@@ -5,11 +5,11 @@
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "http-proxy-middleware": "^0.19.1",
     "install": "^0.12.2",
     "moment": "^2.24.0",
-    "npm": "^6.9.0",
+    "npm": "^6.11.3",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-icons": "^2.2.7",
