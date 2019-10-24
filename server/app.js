@@ -53,6 +53,6 @@ app.use("/", channelRoutes);
 io.on("connection", socketManager);
 // io.on("user_connected", userConnected);
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 4000;
 
 http.listen(port, () => console.log(`Api is listening on port: ${port}`));
